@@ -1,0 +1,52 @@
+==========================================================================================================================================================================
+Mark Scheme
+==========================================================================================================================================================================
+Section 1 : Project Fundamentals
+
+	Background and literature survey
+	Theoretical studies
+	Design
+	Implementation
+	Testing
+	Experimental methods
+
+Section 2 : The problem domain
+
+	Understanding
+	Problem solving ability
+	Creativity
+	Coping with challenges
+
+Section 3 : Communication skills
+	
+	Report content and conclusions
+	Report presentation
+
+Section 4 : Project execution
+	
+	Planning and time management
+	Quantity of work
+	Diligence
+
+
+==========================================================================================================================================================================
+Weightings:
+==========================================================================================================================================================================
+Section 1: 45%
+Section 2: 30%
+Section 3: 10%
+Section 4: 15%
+
+
+==========================================================================================================================================================================
+Guidance 
+==========================================================================================================================================================================
+Abstract				No more than 100 words, on a separate page
+Introduction			Could expand the background and requirements.
+Main Body of Report		Use sensible numbering system for chapters and sub-headings.
+Further work			Indicate what could/should follow.
+Conclusion				Very important.
+Acknowledgements		A nice gesture to your supervisors and those who have helped you.
+Appendices				Can accommodate detailed material not essential to the main body of the report. Should include any publications you have contributed to
+Bibliography			All those references important for understanding key theoretical and/or practical issues related to the project.
+References				Any standard format may be used, but only list those which really are relevant or important. Please read the section on plagiarism and referencing.

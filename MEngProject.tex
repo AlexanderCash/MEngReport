@@ -1,0 +1,107 @@
+\documentclass{uoyths}
+
+\usepackage[style=ieee,backend=bibtex]{biblatex}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{booktabs}
+\usepackage[cmex10]{amsmath}
+\usepackage{array}
+\usepackage{gensymb}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage[toc,acronym]{glossaries}
+\makeglossaries
+
+\addbibresource{references.bib}
+
+\usepackage{url}
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\usepackage{xspace}
+
+%Glossary terms
+\newacronym{ADC}{ADC}{Analogue to Digital Converter}
+\newacronym{CAD}{CAD}{Computer Aided Design}
+
+
+\begin{document}
+
+
+% Title Page
+\begin{titlepage}[cover=true, title=true, logo=true] 
+\title{Project Title}
+\author{Author}
+\date{\today}
+\supervisors{Supervisors}
+\academicyear{2015/2016}
+\end{titlepage}
+
+% Front Matter
+\begin{frontMatterEnv}
+
+% Dedication
+\begin{chapterEnv}{Dedication}
+Dedication
+%TODO: Acknowledgements
+\end{chapterEnv}
+
+% Acknowledgments
+\begin{chapterEnv}{Acknowledgements}
+Acknowledgements
+%TODO: Acknowledgements
+\end{chapterEnv}
+
+\include{Abstract/abstract}
+
+% Table of Contents
+{\singlespacing\tableofcontents}%
+
+\listoffigures
+
+\listoftables
+
+\end{frontMatterEnv}
+
+
+
+
+
+
+\begin{mainMatterEnv}
+
+
+\include{Chapter1/chapter1}
+\include{Chapter2/chapter2}
+\include{Chapter3/chapter3}
+\include{Chapter4/chapter4}
+\include{Chapter5/chapter5}
+\include{Chapter6/chapter6}
+\include{Chapter7/chapter7}
+
+
+\end{mainMatterEnv}
+
+% Back Matter
+\begin{backMatterEnv}
+
+
+% Glossary
+\printglossaries
+
+\printbibliography
+
+% Appendix
+        \begin{chapterEnv}[appen:loads]{Load of Appendices}
+            \begin{sectionEnv}[asec:example-appendix]{An Appendix}
+                Example appendix!
+            \end{sectionEnv}
+        \end{chapterEnv}
+
+
+\end{backMatterEnv}
+
+\end{document}
+
+

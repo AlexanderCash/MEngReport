@@ -1,0 +1,73 @@
+Report Plan
+
+Cover
+Title
+Abstract
+Acknowledgements
+Contents
+List of Figures
+List of Tables
+Abbreviations
+Constants/Symbols
+Dedication/Shoutouts
+
+Chapters
+	Introduction; 
+		intro to UAVs
+		Aerial photography with UAVs
+		ArduPilot and ArduPlane
+		Hardware choices
+		Motivations + objectives
+
+	Lit Review; 
+		Dubin's paths + path following in wind
+		Dev wiki re: adding modes etc
+	Part 1 - Route planning
+		MATLAB methods - discuss package from andrew walker
+		C++ conversion
+		Resulting applications + testing procedures
+			Describe the resulting algorithm and how it finds a suitable candidate
+			Deficiencies in the code and how to improve it
+	Part 2 - Autopilot Control
+		Attempts at new flight modes
+		New commands instead
+		Error handling?
+	Future work
+		incorporation into MissionPlanner
+		resilience to gusts - compare GPS+airspeed sensor to detect deviations
+		Calculate on board the UAV
+		?
+	Planning
+		Agile lol - task breakdown
+		Discuss the elements of unknown
+		Setbacks etc etc
+	Conclusion
+		A lot I would have done differently...
+		What was good
+		What was bad
+		Moving forward
+
+
+	
+Appendices
+	Screenshots of testing
+	Testing results (table?)
+	Mapping
+
+Bibliography
+
+
+=============================
+Title page format
+
+"
+THE COMPRESSION OF EAR ACOUSTIC DATA
+Joe F Bloggs
+Alcuin College
+University of York
+May 2016
+4th Year Project Report for degree of MEng
+in Electronic Engineering
+"
+
+ 

@@ -1,0 +1,30 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\contentsline {chapter}{Dedication}{3}{chapter*.1}
+\contentsline {chapter}{Acknowledgements}{4}{chapter*.2}
+\contentsline {chapter}{Abstract}{5}{chapter*.3}
+\contentsline {chapter}{\numberline {1}Introduction}{10}{chapter.1}
+\contentsline {section}{\numberline {1.1}An Introduction to Unmanned Aerial Vehicles}{10}{section.1.1}
+\contentsline {section}{\numberline {1.2}UAVs for Aerial Photography}{11}{section.1.2}
+\contentsline {section}{\numberline {1.3}ArduPilot}{14}{section.1.3}
+\contentsline {subsection}{\numberline {1.3.1}ArduPlane}{15}{subsection.1.3.1}
+\contentsline {subsection}{\numberline {1.3.2}JSBSim}{15}{subsection.1.3.2}
+\contentsline {subsubsection}{MAVExplorer}{17}{section*.7}
+\contentsline {subsection}{\numberline {1.3.3}MissionPlanner and APM Planner}{18}{subsection.1.3.3}
+\contentsline {section}{\numberline {1.4}Autopilot Hardware}{18}{section.1.4}
+\contentsline {chapter}{\numberline {2}Literature Review}{20}{chapter.2}
+\contentsline {section}{\numberline {2.1}Dubin's Paths}{20}{section.2.1}
+\contentsline {section}{\numberline {2.2}Path Following in Wind}{20}{section.2.2}
+\contentsline {chapter}{\numberline {3}Task One: Path Planning}{21}{chapter.3}
+\contentsline {section}{\numberline {3.1}The Problem}{21}{section.3.1}
+\contentsline {section}{\numberline {3.2}Solution}{21}{section.3.2}
+\contentsline {chapter}{\numberline {4}Task Two: Path Following}{22}{chapter.4}
+\contentsline {section}{\numberline {4.1}The Problem}{22}{section.4.1}
+\contentsline {section}{\numberline {4.2}Solution}{22}{section.4.2}
+\contentsline {chapter}{\numberline {5}Future Work}{23}{chapter.5}
+\contentsline {section}{\numberline {5.1}Proposal 1: Incorporation into MissionPlanner}{23}{section.5.1}
+\contentsline {chapter}{\numberline {6}Project Planning and Management}{24}{chapter.6}
+\contentsline {section}{\numberline {6.1}Agile Planning}{24}{section.6.1}
+\contentsline {chapter}{\numberline {7}Summary and Conclusions}{25}{chapter.7}
+\contentsline {section}{\numberline {7.1}Conclusions}{25}{section.7.1}
+\contentsline {chapter}{\numberline {A}Load of Appendices}{27}{appendix.A}
+\contentsline {section}{\numberline {A.1}An Appendix}{27}{section.A.1}

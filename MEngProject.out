@@ -1,0 +1,28 @@
+\BOOKMARK [0][-]{chapter*.1}{Dedication}{}% 1
+\BOOKMARK [0][-]{chapter*.2}{Acknowledgements}{}% 2
+\BOOKMARK [0][-]{chapter*.3}{Abstract}{}% 3
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 4
+\BOOKMARK [1][-]{section.1.1}{An Introduction to Unmanned Aerial Vehicles}{chapter.1}% 5
+\BOOKMARK [1][-]{section.1.2}{UAVs for Aerial Photography}{chapter.1}% 6
+\BOOKMARK [1][-]{section.1.3}{ArduPilot}{chapter.1}% 7
+\BOOKMARK [2][-]{subsection.1.3.1}{ArduPlane}{section.1.3}% 8
+\BOOKMARK [2][-]{subsection.1.3.2}{JSBSim}{section.1.3}% 9
+\BOOKMARK [2][-]{subsection.1.3.3}{MissionPlanner and APM Planner}{section.1.3}% 10
+\BOOKMARK [1][-]{section.1.4}{Autopilot Hardware}{chapter.1}% 11
+\BOOKMARK [0][-]{chapter.2}{Literature Review}{}% 12
+\BOOKMARK [1][-]{section.2.1}{Dubin's Paths}{chapter.2}% 13
+\BOOKMARK [1][-]{section.2.2}{Path Following in Wind}{chapter.2}% 14
+\BOOKMARK [0][-]{chapter.3}{Task One: Path Planning}{}% 15
+\BOOKMARK [1][-]{section.3.1}{The Problem}{chapter.3}% 16
+\BOOKMARK [1][-]{section.3.2}{Solution}{chapter.3}% 17
+\BOOKMARK [0][-]{chapter.4}{Task Two: Path Following}{}% 18
+\BOOKMARK [1][-]{section.4.1}{The Problem}{chapter.4}% 19
+\BOOKMARK [1][-]{section.4.2}{Solution}{chapter.4}% 20
+\BOOKMARK [0][-]{chapter.5}{Future Work}{}% 21
+\BOOKMARK [1][-]{section.5.1}{Proposal 1: Incorporation into MissionPlanner}{chapter.5}% 22
+\BOOKMARK [0][-]{chapter.6}{Project Planning and Management}{}% 23
+\BOOKMARK [1][-]{section.6.1}{Agile Planning}{chapter.6}% 24
+\BOOKMARK [0][-]{chapter.7}{Summary and Conclusions}{}% 25
+\BOOKMARK [1][-]{section.7.1}{Conclusions}{chapter.7}% 26
+\BOOKMARK [0][-]{appendix.A}{Load of Appendices}{}% 27
+\BOOKMARK [1][-]{section.A.1}{An Appendix}{appendix.A}% 28

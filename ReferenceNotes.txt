@@ -1,0 +1,19 @@
+History of Aerial Photography date
+
+http://professionalaerialphotographers.com/content.aspx?page_id=22&club_id=808138&module_id=158950
+
+Ardupilot history
+http://ardupilot.org/plane/docs/common-history-of-ardupilot.html
+
+dronecode
+https://www.dronecode.org/about
+
+
+the linux foundation
+http://www.linuxfoundation.org/
+
+Dronecode announcement 
+http://diydrones.com/profiles/blogs/introducing-the-dronecode-foundation
+
+ardupilot nonprofit
+http://diydrones.com/profiles/blogs/a-new-chapter-in-ardupilot-development
