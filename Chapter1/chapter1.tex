@@ -12,6 +12,10 @@
     \graphicspath{{Chapter1/Figs/Vector/}{Chapter1/Figs/}}
 \fi
 
+%TODO intro here? Describe what this chapter is for; background information
+%TODO discuss fahim
+
+The rest of this chapter is aimed at providing the reader with suitable background knowledge to provide context for this project and an understanding of the working environment. The last section of this chapter will outline the motivations for this project and the resulting objectives to be tackled in this project. 
 
 %******************************************************************************************************
 %******************************************************************************************************
@@ -40,14 +44,14 @@ This project will primarily focus on the mapping of land beneath the UAV, and as
 
 \begin{figure}[htbp!] 
 \centering    
-\includegraphics[width=0.3\textheight]{SimpleLawnmower}
+\includegraphics[width=0.7\textwidth]{SimpleLawnmower}
 \caption[Simple Lawnmower Pattern]{The general form of a lawnmower pattern aerial imaging flightpath}
 \label{fig:simplelawnmower}
 \end{figure}
 
 \begin{figure}[htbp!] 
 \centering    
-\includegraphics[width=0.3\textheight]{SimpleSpiral}
+\includegraphics[width=0.7\textwidth]{SimpleSpiral}
 \caption[Simple Spiral Pattern]{The general form of a spiral pattern aerial imaging flightpath}
 \label{fig:simplespiral}
 \end{figure}
@@ -58,7 +62,7 @@ As the lawnmower pattern does not require the horizontal sections of the path in
 
 \begin{figure}[htbp!] 
 \centering    
-\includegraphics[width=0.3\textheight]{ImagingLawnmower}
+\includegraphics[width=0.7\textwidth]{ImagingLawnmower}
 \caption[Imaging Lawnmower Pattern]{A version of the lawnmower pattern, using only imaging paths}
 \label{fig:imaginglawnmower}
 \end{figure}
@@ -129,13 +133,13 @@ This simulator forms the bulk of the testing for this project, and is used to ma
 
 \subsubsection{MAVExplorer}
 \label{intro:mavexplorer}
-MAVExplorer is a log analysis tool, provided in the form of a python script suitably named \textit{MAVExplorer.py}. This allows us to generate a map of the area over which the UAV has flown with white lines displaying the planned mission, and a green line plotting the actual route the UAV flew. An example of this can be seen in Fig. %TODO MAVExplorer example, choose random one
+MAVExplorer is a log analysis tool, provided in the form of a python script suitably named \textit{MAVExplorer.py}. This allows us to generate a map of the area over which the UAV has flown with white lines displaying the planned mission, and a green line plotting the actual route the UAV flew. An example of this can be seen in Fig. \ref{fig:mavexplorer}.
 
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{MAVExplorer}
 \caption[MAVExplorer Example]{The mapping view provided by MAVExplorer utilising log files from flight simulations}
-\label{fig:missionplanner}
+\label{fig:mavexplorer}
 \end{figure}
 
 \subsection{MissionPlanner and APM Planner}
@@ -152,7 +156,7 @@ Fig. \ref{fig:missionplanner} shows a typical mission plan in MissionPlanner, wh
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{MissionPlanner}
-\caption[MissionPlanner]{The mission planning view of the Windows based MissionPlanner software}
+\caption[MissionPlanner Desktop Software]{The mission planning view of the Windows based MissionPlanner software}
 \label{fig:missionplanner}
 \end{figure}
 
@@ -161,9 +165,43 @@ Fig. \ref{fig:missionplanner} shows a typical mission plan in MissionPlanner, wh
 \section{Autopilot Hardware} 
 \label{intro:hardware}
 
-As also mentioned, one of the key components for autonomous UAV flight using ArduPlane is the controller board which must be mounted on the UAV itself. There are a number of currently available boards that ArduPilot can run on, and over the years there have been many versions of these. These control boards are responsible for processing the mission plan and controlling the aircraft accordingly. During flight, the control board uses GPS readings alongside other sensors where available to direct the aircraft. It does this using the servos connected to the control surfaces, and controlling the thrust generated from the propeller(s). The control board can be connected other devices too, such as camera gimbals and parachute releasing devices, however these are not in use throughout this project. 
+As also mentioned, one of the key components for autonomous UAV flight using ArduPlane is the controller board which must be mounted on the UAV itself. There are a number of currently available boards that ArduPilot can run on, and over the years there have been many versions of these. These control boards are responsible for processing the mission plan and controlling the aircraft accordingly. During flight, the control board uses GPS readings alongside other sensor readings where available to direct the aircraft. It does this using the servos connected to the control surfaces, and controlling the thrust generated from the propeller(s) or engine(s). The control board can be connected other devices too, such as camera gimbals and parachute release devices, however these are not in use throughout this project. 
 
-The two most popular control boards in use are the Pixhawk and the APM 2.x series boards. 
+There are currently 4 supported controller boards that have open hardware design, and 4 controller boards with closed hardware designs. Additional to this are a number of controller boards which are no longer supported, as they do not have the storage capabilities to load on the latest versions of the code. The most popular currently supported board is the Pixhawk board, which can be seen in Fig. \ref{fig:pixhawk}, and has an open hardware design. The APM 2.x series of controller boards, seen in Fig. \ref{fig:apm2}, used to be very popular however are no longer supported for the latest versions of the code.
 
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[width=0.6\textwidth]{Pixhawk}
+\caption[Pixhawk Controller Board]{The Pixhawk controller board, for which the hardware specification and design is openly available, from \cite{Pixhawk}}
+\label{fig:pixhawk}
+\end{figure}
 
+It is possible to still use the APM 2.x boards as they are still available for purchase online and will work with older versions of the ArduPlane code. This may be beneficial in certain situations, as the Pixhawk board is considerably more expensive than an APM board. The presence of a controller board is not essential for this project, as we are able to use the SITL simulator described in Section \ref{intro:jsbsim} to simulate UAV flight without one. If one is present, it is possible to use a Hardware In The Loop (HITL) simulator to test changes to the codebase by running them on a controller board. In this instance, the controller board replaces JSBSim whilst simulating flight.
+
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[width=0.5\textwidth]{APM2}
+\caption[APM 2.6 Controller Board]{The APM 2.6 controller board, which is no longer supported by the ArduPilot project, from \cite{Apm2}}
+\label{fig:apm2}
+\end{figure}
+
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Project Motivations and Objectives} 
+\label{intro:objectives}
+
+The inspiration for the work conducted for this project comes from the supervisor for this project, Dr Andrew Pomfret. He was part of an expedition to map a glacier in Svalbard, Norway using a UAV equipped with a camera in order to determine any movement of the glacier over time. Although using a professional grade UAV and associated route planning software, he found a number of its features lacking. The most relevant issue was that planning a battery efficient route that would also capture high quality images was laborious, and that regardless of how well you planned the route, he felt the UAV would often not be optimising its battery usage. Following lengthy discussion between the author and Dr Pomfret, two primary objectives were defined.
+
+\subsection{Objective 1: Efficient Route Planning}
+\label{intro:obj1}
+Our first objective is to implement an efficient method for route planning. The solution should enable a user to plan a route that allows us to deliver high quality aerial photographs, without using more battery power than is required. When discussing high quality aerial photographs, we are talking primarily about the position of the UAV relative to the planned route above ground, and as such we require the UAV to be commanded to follow the imaging paths described in Section \ref{intro:photography}. This requires us to plan a route which will result in the UAV travelling the full length of the imaging path which in turn requires the UAV to be aligned with the imaging path before starting it. 
+
+A further requirement for this task is that the planning method should be user-friendly and calculate a desired route from standard waypoint definitions provided in the mission planning software.
+%TODO Wind discussion
+
+\subsection{Objective 2: Route Following}
+\label{intro:obj2}
+
+Our second objective follows on from our first objective, and requires us to enable the UAV to fly the newly define path types. This will require modification of the ArduPlane code so as to be able to understand any new commands and perform them as desired. This may also require a new method of path following than is currently available in official versions of ArduPlane. 
+%TODO finalise objectives
 
