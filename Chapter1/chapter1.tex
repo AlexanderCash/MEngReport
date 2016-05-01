@@ -6,11 +6,9 @@
 \label{intro}
 
 % **************************** Define Graphics Path **************************
-\ifpdf
-    \graphicspath{{Chapter1/Figs/Raster/}{Chapter1/Figs/PDF/}{Chapter1/Figs/}}
-\else
-    \graphicspath{{Chapter1/Figs/Vector/}{Chapter1/Figs/}}
-\fi
+
+\graphicspath{{Chapter1/Figs/}}
+
 
 %TODO intro here? Describe what this chapter is for; background information
 %TODO discuss fahim
@@ -197,11 +195,14 @@ The inspiration for the work conducted for this project comes from the superviso
 Our first objective is to implement an efficient method for route planning. The solution should enable a user to plan a route that allows us to deliver high quality aerial photographs, without using more battery power than is required. When discussing high quality aerial photographs, we are talking primarily about the position of the UAV relative to the planned route above ground, and as such we require the UAV to be commanded to follow the imaging paths described in Section \ref{intro:photography}. This requires us to plan a route which will result in the UAV travelling the full length of the imaging path which in turn requires the UAV to be aligned with the imaging path before starting it. 
 
 A further requirement for this task is that the planning method should be user-friendly and calculate a desired route from standard waypoint definitions provided in the mission planning software.
-%TODO Wind discussion
+
+Building on these aims, it is necessary for this system to work for flight in any environment, meaning it must be able to plan a route that works for the UAV in windy conditions. As such we must incorporate knowledge of the flying environment when planning the path, be that in real-time when flying or beforehand when plannig, this shall be explored later.
 
 \subsection{Objective 2: Route Following}
 \label{intro:obj2}
 
 Our second objective follows on from our first objective, and requires us to enable the UAV to fly the newly define path types. This will require modification of the ArduPlane code so as to be able to understand any new commands and perform them as desired. This may also require a new method of path following than is currently available in official versions of ArduPlane. 
+
+Additionally, this objective should work with the first to provide flight in windy conditions. This may be entirely a feature of the planning stage or it may be a feature of the autopilot implementation, this shall be explored later.
 %TODO finalise objectives
 
