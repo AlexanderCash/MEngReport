@@ -1,6 +1,8 @@
 \documentclass{uoyths}
 
-\usepackage[style=ieee,backend=bibtex]{biblatex}
+
+
+%\usepackage[style=ieee,backend=bibtex]{biblatex}
 \usepackage{graphicx}
 \usepackage{epstopdf}
 \usepackage{booktabs}
@@ -12,7 +14,7 @@
 \usepackage[toc,acronym]{glossaries}
 \makeglossaries
 
-\addbibresource{references.bib}
+%\addbibresource{references.bib}
 
 \usepackage{url}
 
@@ -86,7 +88,11 @@ Acknowledgements
 % Glossary
 \printglossaries
 
-\printbibliography
+% \printbibliography
+
+\bibliographystyle{IEEEtranOnlineMod}
+%\bibliographystyle{IEEEtran}
+\bibliography{IEEEabrv,references}
 
 % Appendix
         \begin{chapterEnv}[appen:loads]{Load of Appendices}
