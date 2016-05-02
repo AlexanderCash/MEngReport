@@ -20,7 +20,7 @@ Now that we have clearly defined objectives, it is necessary to discuss and anal
 In 1957, an American mathematician by the name of Lester Dubins described what we now refer to as ``Dubins paths'' \cite{dubins1957curves}. A Dubins path described the shortest route for a vehicle between two points under the following conditions:
 \begin{itemize}
 	\item The curvature of the path is bound by a limit
-	\item The vehicle is only able to travel in one direction; forward
+	\item The vehicle is only able to travel forward and at a constant speed
 	\item The path starts at a position with a given orientation
 	\item The path ends at a position with a given orientation
 	\item The path is in a 2D plane
@@ -63,9 +63,14 @@ where, for example, RSL refers to a path consisting of a right turn segment, fol
 
 In these diagrams, the arrows show us the initial and final locations, orientations, and direction of travel. The dashed circle in red shows the maximum curvature of any part of the path, which corresponds to a UAV's minumum turning radius. Dubins paths can take many forms, these three examples are intended to enable the reader to visualise their general form and how they relate to the conditions defined above.
 
-
+%TODO finish this section - describe maths behind it?
+%TODO mention andrew walker dubins program
 
 %******************************************************************************************************
 %******************************************************************************************************
 \section{Path Following in Wind}
 \label{litrev:path}
+
+One of the most important factors we need to account for when planning a suitable path is the effect of wind. We need to be able to account for it in both the path planning, and path following stages of this project. A method for calculating a Dubins path that accounts for the effects of a constant wind is proposed in \cite{mcgee2005optimal}.
+
+We can define the model of our aircraft moving in one plane 
