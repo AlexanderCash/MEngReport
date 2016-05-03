@@ -71,7 +71,13 @@ Using the notation found in \cite{shkel2001classification}, we can define a path
 	L = t + p + q
 \end{equation}
 
-where $t$, $p$, and $q$ denote the length of the first, second, and third segments respectively \cite{dubins1957curves}. The full set of formulae for calculating the values of $t$, $p$, and $q$ for each path type can be found in \cite{shkel2001classification}. Using this information, we can create a system to evaluate the length of each path type for a given set of input parameters then compare these values with one another to find the shortest path type. The input parameters for this system would be:
+where $t$, $p$, and $q$ denote the length of the first, second, and third segments respectively \cite{dubins1957curves}. When discussing multiple solutions for the same input parameters, we use subscripts to specify which path we are talking about, for example the length of a given LSL path can be written as
+
+\begin{equation}
+	L_{lsl} = t_{lsl} + p_{lsl} + q_{lsl}
+\end{equation}
+
+The full set of formulae for calculating the values of $t$, $p$, and $q$ for each path type can be found in \cite{shkel2001classification}. Using this information, we can create a system to evaluate the length of each path type for a given set of input parameters then compare these values with one another to find the shortest path type. The input parameters for this system would be:
 
 \begin{itemize}
 	\item The co-ordinates of the start location
@@ -132,30 +138,53 @@ When considering the effects of wind, it is important to define two frames of re
 
 Both frames of reference are considered to be seen from a top-down perspective, as if we were looking directly down on the UAV flying over the ground beneath. This is because ArduPilot defines a mission using waypoints specified by GPS locations, and the flight simulator discussed in Section \ref{intro:jsbsim} also provides this view. In both frames of reference, paths are defined irrespective of any roll, pith, or yaw the UAV may display. For the ground relative frame, it can be best described as the tracking the location of the UAV according to its GPS readings, and for the air relative frame as the movement of the centre of gravity of the UAV through the air. 
 
-We can say that when there is no wind and we treat the air as completely stationary, a ground relative path travelled by the UAV will be the same as the corresponding air relative path. This means that in a zero wind condition we can simply use the formulae discussed above in Section \ref{litrev:dubins} to plan our desired turns between imaging paths. Extending on this however, a method for calculating a Dubins path that accounts for the effects of a constant wind is proposed in \cite{mcgee2005optimal}.
+We can say that when there is no wind and we treat the air as completely stationary, a ground relative path travelled by the UAV will be the same as the corresponding air relative path. This means that in a zero wind condition we can simply use the formulae discussed above in Section \ref{litrev:dubins} to plan our desired turns, completed using Dubins paths, between imaging paths. Extending on this however, a method for calculating a Dubins path that accounts for the effects of a constant wind is proposed in \cite{mcgee2005optimal}.
+
+This paper proposes a solution that utilises a virtual target point, $vt$, for the UAV to fly to in order to reach our desired location. As we are using our UAV for aerial photography, we are most interested in the commanding the UAV to a location directly above a point on the ground below, as opposed to a location relative to the air. If we define this location on the ground as a location denoted by $d$, its corresponding point in the air relative frame will be moving in the opposite direction to the movement of the air at the same speed as the wind speed. 
 
 
+Fig. \ref{fig:windalgorithm} shows us how we work out the movement of the virtual target. $q_0$ is the end point of one imaging run, and $d$ is the start of the next imaging run. We need to find a Dubins path between these two points with the correct orientations, accounting for the wind vector shown at the top of the diagram. Both $q_0$ and $d$ are ground relative points, whilst $vt$ is a point relative to the air through which the UAV is travelling. With respect to the air, $vt$ is moving opposite to the wind, and as such tracks the movement of $d$ relative to the air.
+\vspace{1cm}
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[width=0.7\textwidth]{WindAlgorithm}
+\caption[Calculating a Dubins Path in Wind]{A display of how the virtual target point moves with regard to the start and end points of our path and wind}
+\label{fig:windalgorithm}
+\end{figure}
 
+To find a suitable path, we need to define two time measurements; $T_{vt}$ and $T_a$. $T_{vt}$ is the time taken for the virtual target to have moved from $d$ to its current location, whilst $T_{vt}$ is the time taken for the UAV to fly a Dubins path from $q_0$ to the location of $vt$. To find a solution to this problem, we must find a point at which $T_a$ and $T_{vt}$ are equal, which will result in the UAV flying to the point $vt$ with the desired orientation, and as such be directly over point $d$. 
 
+%TODO explain momentum and heading vectors
 
+We are able to use this information to generate a search algorithm which will find a suitable Dubins path to follow to correctly complete a turn between imaging paths in wind, utilising Dubins path to minimise flight time and battery usage. This technique should, in theory, allow us to calculate suitable paths in any wind condition providing the wind is moving slower than the maximum airspeed of the UAV. It does have major limitations however, in that it assumes constant wind in both speed and direction. %TODO extend downfalls of this method.
 
+Another problem, as discussed in \cite{mcgee2005optimal}, is that for certain scenarios, this search algorithm will fail. This can occur when flying in a very low wind environment, resulting in the $vt$ moving very slowly, whilst the UAV is travelling a lot faster. This will mean that due to the differences in speed, there is no point at which one of the 6 regular Dubins paths will satisfy the condition of $T_a$ and $T_{vt}$ being equal. A solution to this is to fly a non-optimal path, meaning a path which is no longer the shortest between the two points. There are a number of ways to solve this, including adding two new path types based on LRL and RLR paths. These new types can be used to travel a longer $p$ segment of the path, thus lengthening the path in order to provide a solution to the algorithms equality condition. Details on how these paths are calculated can be found in \cite{mcgee2005optimal}. %TODO explain LRL outer and inner etc?
 
+%TODO summarise section to round it off
 
+%******************************************************************************************************
+%******************************************************************************************************
+\section{ArduPlane Documentation}
+\label{litrev:arduplane}
 
+As the entire ArduPilot project is open source and not run in an effort to generate revenue, there is little incentive for its developers to maintain thorough documentation or to extend support for old versions of their products. There are however a number of articles available on the ArduPilot developer wiki, which is a subsection of their main website \cite{ArduPilotDev}. Important resources include
+\begin{itemize}
+  	\item Use of SITL utilizing JSBSim: \url{http://ardupilot.org/dev/docs/using-sitl-for-ardupilot-testing.html}
+  	\item How to add a new flight mode to ArduCopter: \url{http://ardupilot.org/dev/docs/apmcopter-adding-a-new-flight-mode.html}
+  	\item How to add new navigation commands: \url{http://ardupilot.org/dev/docs/code-overview-adding-a-new-mavlink-message.html}
+  	\item How to build the code using various techniques on a number of operating systems: \url{http://ardupilot.org/dev/docs/building-the-code.html}
+  \end{itemize}  
 
+These wiki pages are very useful in starting to understand the code, however often are specific to the newest ArduPilot versions and are sometimes even specific to ArduCopter, as this appears to be the most popular of their products. 
 
+Outside of this developer wiki, the only other useful information comes from other users and developers of the code. This information is found on two forums
 
+\begin{itemize}
+	\item The diydrones user forums: \url{http://diydrones.com/forum}
+	\item The official ArduPilot forums: \url{http://discuss.ardupilot.org/}
+	\item 	
+\end{itemize}
 
+Gathering information from these two forums can be rather tedious, as the search functions on the diydrones forum is weak, and finding results depends on either asking a question or someone having already asked it in the past (many of which may not have even received an answer). 
 
-
-
-
-
-
-
-
-
-
-
-
-
+%TODO finalise arduplane nonsense
