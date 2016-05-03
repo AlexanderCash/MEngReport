@@ -2,6 +2,8 @@
 %****************************** Second Chapter ********************************************************
 %******************************************************************************************************
 
+\externaldocument{{../Chapter1/chapter1}}
+
 \chapter{Literature Review}
 \label{litrev}
 
@@ -17,7 +19,7 @@ Now that we have clearly defined objectives, it is necessary to discuss and anal
 %******************************************************************************************************
 \section{Dubins Paths}
 \label{litrev:dubins}
-In 1957, an American mathematician by the name of Lester Dubins described what we now refer to as ``Dubins paths'' \cite{dubins1957curves}. A Dubins path described the shortest route for a vehicle between two points under the following conditions:
+In 1957, an American mathematician by the name of Lester Dubins described what we now refer to as ``Dubins paths'' \cite{dubins1957curves}. A Dubins path describes the shortest route for a vehicle between two points under the following conditions:
 \begin{itemize}
 	\item The curvature of the path is bound by a limit
 	\item The vehicle is only able to travel forward and at a constant speed
@@ -28,7 +30,7 @@ In 1957, an American mathematician by the name of Lester Dubins described what w
 
 In the context of this project, the maximum curvature of the path is dictated by the maximum turning rate of the given aircraft, and as such is a hard limit which must be observed for any path planning processes.
 
-The results of Dubins' work was that the shortest path to meet these conditions consisted of three segments, which could be either a left turn segment, a right turn segment, or a straight line segment. These are given the identifiers L, R, and S, respectively. Dubins showed that the shortest available path would always fall under one of the following 6 categories:
+The results of Dubins' work was that the shortest path to meet these conditions consisted of three segments, which could be either a left turn segment, a right turn segment, or a straight line segment. These are given the identifiers L, R, and S, respectively. The left and right turns that make up the L and R segments are conducted at the maximum turning rate achievable by the vehicle, which is equal to the limit by which the path curvature is bound. Dubins showed that the shortest available path would always fall under one of the following 6 categories:
 \begin{enumerate}
 	\item RSR
 	\item RSL
@@ -63,14 +65,97 @@ where, for example, RSL refers to a path consisting of a right turn segment, fol
 
 In these diagrams, the arrows show us the initial and final locations, orientations, and direction of travel. The dashed circle in red shows the maximum curvature of any part of the path, which corresponds to a UAV's minumum turning radius. Dubins paths can take many forms, these three examples are intended to enable the reader to visualise their general form and how they relate to the conditions defined above.
 
-%TODO finish this section - describe maths behind it?
-%TODO mention andrew walker dubins program
+Using the notation found in \cite{shkel2001classification}, we can define a paths length as
+
+\begin{equation}
+	L = t + p + q
+\end{equation}
+
+where $t$, $p$, and $q$ denote the length of the first, second, and third segments respectively \cite{dubins1957curves}. The full set of formulae for calculating the values of $t$, $p$, and $q$ for each path type can be found in \cite{shkel2001classification}. Using this information, we can create a system to evaluate the length of each path type for a given set of input parameters then compare these values with one another to find the shortest path type. The input parameters for this system would be:
+
+\begin{itemize}
+	\item The co-ordinates of the start location
+	\item The heading at the start location
+	\item The co-ordinates of the end location
+	\item The heading at the end location
+	\item The minimum turning rate of our UAV
+\end{itemize}
+
+As these Dubins paths are only operating in one plane, we shall not be enabling these turns to be used to change altitude, and shall calculate our paths assuming the altitude is constant. In this regard, we are only considering paths in the $xy$ plane, and not planning to change altitude in the $z$ plane. 
+
+We can simplify our input parameter set by combining the location and orientation at each end of the path into a single input. We shall use $q_n$ as notation for these points, and as such any Dubins path can be considered to be between $q_0$ and $q_1$. We can define a path end point as 
+
+\begin{equation}
+q_n = (x,y,\phi)
+\end{equation}
+
+Where $x$ and $y$ are co-ordinates in the $xy$ plane, and $\phi$ is the orientation at this point. The notation in this project dictates that $\phi$ is an angle measured in radians, with $2\pi$ being equivalent to due East, $\pi$ being due West, and so on. 
+
+For an example, using the formulae described in \cite{shkel2001classification} alongside our notation, a Dubins path from
+
+\begin{equation}
+q_0 = (0,0,0)
+\end{equation}
+
+to
+
+\begin{equation}
+q_1 = (10,10,\pi)
+\end{equation}
+
+describes a start point facing due East, and an endpoint facing due West which is $\sqrt{10^2 + 10^2}$ units to the North-East of the start location. In this scenario let us assume we are working in metres. If this route is to be flown by a UAV with a minimum turning radius of 20 metres would result in a $LRL$ Dubins path where
+
+\begin{equation}
+t = 108.8m 
+\end{equation}
+\begin{equation}
+p = 16.2m 
+\end{equation}
+\begin{equation}
+q = 95.9m 
+\end{equation}
+
+Using all of this information, we can find the shortest path from any point in the $xy$ plane to another point in the $xy$ plane, with defined orientations. This is useful for the work in this project as we are ensuring that we use the minimum battery power, completing the turns quickly, and are aligning the UAV with the imaging paths. This last point is important as it provides a means to ensure high quality aerial photographs, as defined in Section \ref{intro:obj1}. Ensuring that the UAV is aligned with an imaging path prior to traversing it means that we can confidently say that once on the imaging path, the images captured will be useful. This simplifies the path planning process as it means no extra steps need to be taken to ensure we are able to capture useful images from the very beginning of the imaging path.
+
+A small standalone application is publicly available and licensed for re-use on GitHub which is capable of calculating the lengths of each type of Dubins path for a given set of input parameters \cite{WalkerDubinsCurves}. This application implements the formulae described in \cite{shkel2001classification} for calculating the lengths of each of these paths, and then returns the values of the shortest path along with its path type. The code for this application is written in C, although a Python version is also available. Extending on this, a MATLAB Mex wrapper is available on the MATLAB MathWorks File Exchange \cite{MexDubinsCurves}, which is a simple C++ wrapper enabling the original application to be imported into MATLAB.
+
+%TODO finalise section
 
 %******************************************************************************************************
 %******************************************************************************************************
-\section{Path Following in Wind}
+\section{Paths in Wind}
 \label{litrev:path}
 
-One of the most important factors we need to account for when planning a suitable path is the effect of wind. We need to be able to account for it in both the path planning, and path following stages of this project. A method for calculating a Dubins path that accounts for the effects of a constant wind is proposed in \cite{mcgee2005optimal}.
+One of the most important factors we need to account for at all stages of this project is the effect of wind; we need to be able to account for it in both path planning and path following. The literature discussed in Section \ref{litrev:dubins} is sufficient to enable us to calculate and plan a suitable flight path, only in an environment with zero wind. As such we need to be able to account for the effects of wind in any given direction to still plan a path that will be as short as possible whilst still resulting in the UAV navigating to the correct location.
 
-We can define the model of our aircraft moving in one plane 
+When considering the effects of wind, it is important to define two frames of reference that shall be in use throughout this paper. The first is what shall be known as the ``ground relative'' frame of reference, and the second is the ``air relative'' frame of reference. The ground relative frame refers to the position of the UAV in relation to the ground, whilst the air relative frame refers to the position of the UAV relative the body of air it is moving through. For this project we shall be treating the air as a consistent fluid that moves at the speed of the wind, relative to the ground. The true and accurate motion of the air is far too complex and out of scope for this project, so the movement of air due to thermal effects and such will not be considered. 
+
+Both frames of reference are considered to be seen from a top-down perspective, as if we were looking directly down on the UAV flying over the ground beneath. This is because ArduPilot defines a mission using waypoints specified by GPS locations, and the flight simulator discussed in Section \ref{intro:jsbsim} also provides this view. In both frames of reference, paths are defined irrespective of any roll, pith, or yaw the UAV may display. For the ground relative frame, it can be best described as the tracking the location of the UAV according to its GPS readings, and for the air relative frame as the movement of the centre of gravity of the UAV through the air. 
+
+We can say that when there is no wind and we treat the air as completely stationary, a ground relative path travelled by the UAV will be the same as the corresponding air relative path. This means that in a zero wind condition we can simply use the formulae discussed above in Section \ref{litrev:dubins} to plan our desired turns between imaging paths. Extending on this however, a method for calculating a Dubins path that accounts for the effects of a constant wind is proposed in \cite{mcgee2005optimal}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
