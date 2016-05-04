@@ -3,6 +3,9 @@
 %******************************************************************************************************
 
 \externaldocument{{../Chapter1/chapter1}}
+\externaldocument{{../Chapter3/chapter3}}
+\externaldocument{{../Chapter4/chapter4}}
+\externaldocument{{../Chapter5/chapter5}}
 
 \chapter{Literature Review}
 \label{litrev}
@@ -160,7 +163,9 @@ We are able to use this information to generate a search algorithm which will fi
 
 Another problem, as discussed in \cite{mcgee2005optimal}, is that for certain scenarios, this search algorithm will fail. This can occur when flying in a very low wind environment, resulting in the $vt$ moving very slowly, whilst the UAV is travelling a lot faster. This will mean that due to the differences in speed, there is no point at which one of the 6 regular Dubins paths will satisfy the condition of $T_a$ and $T_{vt}$ being equal. A solution to this is to fly a non-optimal path, meaning a path which is no longer the shortest between the two points. There are a number of ways to solve this, including adding two new path types based on LRL and RLR paths. These new types can be used to travel a longer $p$ segment of the path, thus lengthening the path in order to provide a solution to the algorithms equality condition. Details on how these paths are calculated can be found in \cite{mcgee2005optimal}. %TODO explain LRL outer and inner etc?
 
+%TODO define vt intercept
 %TODO summarise section to round it off
+%TODO define cross track error
 
 %******************************************************************************************************
 %******************************************************************************************************
