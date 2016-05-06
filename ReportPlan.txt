@@ -55,19 +55,4 @@ Appendices
 	Mapping
 
 Bibliography
-
-
-=============================
-Title page format
-
-"
-THE COMPRESSION OF EAR ACOUSTIC DATA
-Joe F Bloggs
-Alcuin College
-University of York
-May 2016
-4th Year Project Report for degree of MEng
-in Electronic Engineering
-"
-
  

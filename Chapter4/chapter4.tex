@@ -1,15 +1,18 @@
 %******************************************************************************************************
 %******************************* Fourth Chapter *******************************************************
 %******************************************************************************************************
+
+\externaldocument{{../Chapter1/chapter1}}
+\externaldocument{{../Chapter2/chapter2}}
+\externaldocument{{../Chapter3/chapter3}}
+\externaldocument{{../Chapter5/chapter5}}
+
+
 \chapter{Task Two: Path Following}
 \label{task2}
 
 % **************************** Define Graphics Path **************************
-\ifpdf
-    \graphicspath{{Chapter4/Figs/Raster/}{Chapter4/Figs/PDF/}{Chapter4/Figs/}}
-\else
-    \graphicspath{{Chapter4/Figs/Vector/}{Chapter4/Figs/}}
-\fi
+\graphicspath{{Chapter4/Figs/}}
 
 %******************************************************************************************************
 %******************************************************************************************************
@@ -21,3 +24,10 @@
 %******************************************************************************************************
 \section{Solution}
 \label{task2:solution}
+
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[angle=90,origin=c,height=0.7\textheight]{32_20_RollComparison}
+\caption[]{roll comparison}
+\label{fig:32rollcomparison}
+\end{figure}
