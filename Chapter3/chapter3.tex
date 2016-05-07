@@ -115,9 +115,9 @@ In this section we shall be discussing the implementation process for the task a
 \subsection{Sub-Task 1: Plotting Dubins Paths in MATLAB}
 \label{task1:implementation:subtask1}
 
-This sub-task was, as expected, very straightforward. The first step was to first analyse the MATLAB Mex wrapper to ensure it was written as expected. Before using MATLAB's Mex function to convert the C++ file into a MATLAB function, the \textit{dubins\_LSL}, \textit{dubins\_RSR}, \textit{dubins\_LSR}, \textit{dubins\_RSL}, \textit{dubins\_RLR}, and \textit{dubins\_LRL} functions were compared with \cite{shkel2001classification}. Thankfully the formulae and path length calculations matched up so were considered reliable. 
+This sub-task was, as expected, very straightforward. The first step was to first analyse the MATLAB Mex wrapper to ensure it was written as expected. Before using MATLAB's Mex function to convert the C\texttt{++} file into a MATLAB function, the \textit{dubins\_LSL}, \textit{dubins\_RSR}, \textit{dubins\_LSR}, \textit{dubins\_RSL}, \textit{dubins\_RLR}, and \textit{dubins\_LRL} functions were compared with \cite{shkel2001classification}. Thankfully the formulae and path length calculations matched up so were considered reliable. 
 
-There was, however, one error found in this C++ file. The main function which calls the calculation functions is called \textit{dubins\_init\_normalised}, and is responsible for both initialising, calculating, and assessing all of the path types. The problem was found in the following code snippet: 
+There was, however, one error found in this C\texttt{++} file. The main function which calls the calculation functions is called \textit{dubins\_init\_normalised}, and is responsible for both initialising, calculating, and assessing all of the path types. The problem was found in the following code snippet: 
 
 \begin{minipage}{\linewidth}
 \begin{lstlisting}[language=C++]
@@ -160,7 +160,7 @@ Fig. \ref{fig:pp1demo} shows the output of this program when given the following
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{PP1_Demo}
-\caption[Task 1: Plotting Dubins Paths in MATLAB]{The plot results of sub-task 1 in MATLAB demonstrating a simple RLR Dubins path}
+\caption[Sub-Task 1: Plotting Dubins Paths in MATLAB]{The plot results of sub-task 1 in MATLAB demonstrating a simple RLR Dubins path}
 \label{fig:pp1demo}
 \end{figure}
 
@@ -202,7 +202,7 @@ This algorithm works by adding two additional rows to the output matrix from the
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{PP2_Demo}
-\caption[Task 2: Plotting the Effects of Wind on Dubins Paths in MATLAB]{The plot results of sub-task 2 in MATLAB, showing the ground relative path corresponding to an air relative Dubins path}
+\caption[Sub-Task 2: Plotting the Effects of Wind on Dubins Paths in MATLAB]{The plot results of sub-task 2 in MATLAB, showing the ground relative path corresponding to an air relative Dubins path}
 \label{fig:pp2demo}
 \end{figure}
 
@@ -269,16 +269,48 @@ Once the for loop exits we consider the algorithm solved and call another functi
 	\item $uavSpeed$
 \end{itemize}
 
+The result of this can be seen in Fig. \ref{fig:pp3demo}, where the inputs were exactly the same as for sub-task 2, however instead of $q_0$ having the values $(10,10,3\pi/2)$, we specify $d$ as having these values.
+
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{PP3_Demo}
-\caption[Task 3: Generating an Air Relative Path Based on Desired Ground Relative Destination in MATLAB]{The plot results of sub-task 3 in MATLAB, showing the air relative path calculated from a desired ground relative end point}
+\caption[Sub-Task 3: Generating an Air Relative Path Based on Desired Ground Relative Destination in MATLAB]{The plot results of sub-task 3 in MATLAB, showing the air relative path calculated from a desired ground relative end point}
 \label{fig:pp3demo}
 \end{figure}
 
 
 \subsection{Sub-Task 4: Creating a Standalone Console Application}
 \label{task1:implementation:subtask4}
+
+The last work to complete for this task was to create a standalone console application version of the code in sub-task 3. This did not need to generate any plots, but must return the lengths of each segment of the chosen Dubins path. 
+
+To simplify the development process, instead of converting the code from the Dubins Mex application, we used the original source code available at \cite{WalkerDubinsCurves}. Because the purpose of a Mex wrapper is to provide compatability with MATLAB, the input and output handling is designed to work using MATLAB data structures and functionality. The original source code is a pure C application, which was more straightforward to convert to a console application. The resulting application was written in C\texttt{++} so as to simplify the handling of strings, as we needed to be able to display to the user the path type (e.g. LSL, RSL), and C makes this more complicated. 
+
+The original Dubins path code can be found in \textit{dubins.cpp} which has been modified by the author to fit our purposes. There were a number of functions that were copied and altered to return all 6 path types as opposed to simply the shortest one. This was done as in some scenarios, according to the research in \cite{mcgee2005optimal}, the path which will prove to be a solution to our search algorithm may not be the shortest of the available paths. Accordingly, our search algorithm was modified to assess all path types upon each iteration of the loop. The main body of the search algorithm is as follows:
+
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=C++]
+// Give it a maximum limit of 300 loops
+while (elapsedTime < 30) {
+    elapsedTime = elapsedTime + 0.1; // Increment calculation time value
+    vt[0] = vt[0] + 0.1*(-windSpeed); // Update the x-position of the virtual target
+    Tvt = elapsedTime; // Tvt update
+    allDubins(pathToVTArr, q0, vt, radius, 0.1); // Get all types of dubins path
+    for (int i = 0; i < 6; i++) { // Loop through path types
+        Ta = ((pathToVTArr[i].param[0] + pathToVTArr[i].param[1] + pathToVTArr[i].param[2])*radius)/speed; // Calculate new Ta
+        if (abs(Ta - Tvt) < 0.1) { // If we can consider the problem solved i.e. Ta and Tvt are within 0.1 second of one another
+            solutionFound = true;
+            if (abs(Ta - Tvt) < optimumPathSoFar) { // If this path is the best so far
+                optimumPathSoFar = abs(Ta - Tvt); // Update our best value so far
+                selectedPath = pathToVTArr[i].type; // Update selected path value
+            }
+        }
+    }
+    if (solutionFound) goto solved; // if we have a solution from one of the 6 paths, no need to keep searching
+}
+\end{lstlisting}
+\end{minipage}
+
 
 %******************************************************************************************************
 %******************************************************************************************************
