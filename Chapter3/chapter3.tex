@@ -18,7 +18,9 @@
 \chapter{Task One: Path Planning}
 \label{task1}
 
-In this report the practical work has been clearly divided into two distinct tasks, allowing us to simplify, shorten, and better organise both the work and the reporting of it. This chapter of the report will discuss the first of the two practical tasks, covering the design, implementation, and testing of the solution for the path planning problem discussed in Section \ref{intro:objectives}.
+In this report the practical work has been clearly divided into two distinct tasks, allowing us to simplify, shorten, and better organise both the work and the reporting of it. This chapter of the report will discuss the first of the two practical tasks, covering the design, implementation, and testing of the solution for the path planning problem discussed in Section \ref{intro:objectives}. 
+
+The solutions proposed here are intended to be used in conjunction with the chosen mission planning software prior to flight. From this we can assume that any program or application developed in this section is intended to be run on a personal computer of some description, rather than on the UAV itself. 
 
 %******************************************************************************************************
 %******************************************************************************************************
@@ -51,7 +53,7 @@ As mentioned in Section \ref{intro}, this project is being run in parallel with 
 
 In effect we aim to introduce a new turning technique to the autopilot system, and the first stage of completing this is to be able to plan paths that define these turns. The result of this work will be effectively replacing the straight lines currently joining the ends of imaging paths with curved turns in the form of Dubins paths. We place no importance on the route travelled between the imaging paths, so we can replace the current paths with our own in order to prioritise aligning with imaging paths. By utilising Dubins paths we will also be improving battery life, as by their very definition DUbins paths are the shortest suitable routes we can take. 
 
-We can summarise our aims for this task as covering the following points
+We can summarise our aims for this task as covering the following points:
 
 \begin{itemize}
 	\item Being able to calculate suitable Dubins paths for a given UAV platform, taking into consideration its turning radius

@@ -37,23 +37,24 @@ We can summarise this tasks as being aimed at achieving the following:
 	\item Successfully commanding the UAV to fly in wind to a ground relative point using a Dubins path 
 \end{itemize}
 
-From these aims, we can define a number of stages to split this task into, as we did with the previous task. Doing so simplifies design, implementation, and testing, whilst also providing clear milestones and cut off points to work well with the planning processes used in this project.These stages were defined as:
+%TODO finalise aims
+
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Path Following - Design and Planning}
+\label{task2:design}
+
+As with our previous task, we considered our overall aims and split them up into a number of stages. By splitting the task into stages we simplify design, implementation, and testing, whilst also providing clear milestones and cut off points to work well with the planning processes used in this project. These stages were defined as:
 
 \begin{enumerate}
 	\item Define the format of new commands required to fly a Dubins path
 	\item Enable the UAV to interpret newly added commands
-	\item Command the UAV to fly a Dubins path in both the presence and absence of wind
+	\item Command the UAV to fly a Dubins path in a no-wind scenario
+	\item Command the UAV to fly a Dubins path in the presence of wind
 \end{enumerate}
 
-%******************************************************************************************************
-%******************************************************************************************************
-\section{Path Following - Stage 1: Defining New Flight Commands}
-\label{task2:stage1}
-
-In this section we shall follow the design, implementation, and testing phases completed in order to define our new flight commands. This work prepares us for the next stage of adding functionality to ArduPlane so as to read, interpret, and act upon the new commands we have provided. 
-
-\subsection{Stage 1: Design and Implementation}
-\label{task2:stage1:design}
+\subsection{Stage 1: Defining New Flight Commands}
+\label{task2:design:stage1}
 
 ArduPilot products use MAVLink messages to define all of the commands that may be included in a mission plan; a full list of the current MAVLink messages can be seen at \cite{MavlinkMessages}. A complete mission plan will simply be a collection of MAVLink messages, where each line corresponds to one MAVLink message, consisting of the following fields:
 
@@ -106,44 +107,64 @@ ArduPilot products use MAVLink messages to define all of the commands that may b
 
 The numerical value chosen for each command is very important, as we have to ensure that all MAV\_CMD\_NAV entries are below 95, which is the value of the MAV\_CMD\_NAV\_LAST command, whilst also ensuring we are using values not currently in use. After double checking their values, the value 84 was assigned to the dummy command, 85 to the left hand turn command, 86 to a right hand turn command, and 87 to a straight segment. By running the \textit{generate.sh} script in the GCS\_MAVLINK directory we finalised this stage of the task, inserting our new commands into the header files used by ArduPlane to interpret MAVLink messages.
 
-\subsection{Stage 1: Testing}
-\label{task2:stage1:testing}
 
-The changes produced by this stage were hard to truly test, however would be tested very thoroughly in later stages. The only real testing that was able to be performed at this stage was a visual inspection of the new header files produced. Browsing to \path{...ardupilot/libraries/GCS\_MAVLink/include/mavlink/v1.0/ardupilotmega/ardupilotmega.h} confirmed that all four of our new commands were present in the MAV\_CMD enum structure, along with the descriptions and correct command numbers entered in the XML file discussed above. 
+\subsection{Stage 2: Using New Flight Commands}
+\label{task2:design:stage2}
 
-%******************************************************************************************************
-%******************************************************************************************************
-\section{Path Following - Stage 2: Utilising New Flight Commands}
-\label{task2:stage1}
+The next stage of this work was to enable the autopilot to recognise our new commands, and in the case of the Dubins turn commands, to store the time parameter we had passed it. 
 
-In this section we discuss the design, implementation, and testing phase of enabling ArduPlane to read and interpret our newly defined mission commands. The implementation discussed here is the final and current version created as part of this project, however it was by no means the first method attempted. Further information regarding different approaches to solving this problem will be discussed in Chapter %TODO reference planning problems etc
+\subsection{Stage 3: Flying a Dubins Path in the Absence of Wind}
+\label{task2:design:stage3}
 
-\subsection{Stage 2: Design and Implementation}
-\label{task2:stage2:design}
-
-The design of our final implementation is in fact very simple. The first step towards completing this stage is to convert the MAVLink message into a \textit{cmd} structure, as described in \cite{ArduPilotMAVLink}. To do this we add a case for each of our new commands to the function \textit{mavlink_to_mission_cmd} in \path{...ardupilot/libraries/AP\_Mission/AP\_Mission.cpp}. Each command issued to the autopilot via a MAVLink message is converted into an instance of a \textit{cmd} structure, which is itself composed of variables as well as a number of other data structures. To convert our message into one of these structures, we fill a data field in a \textit{Dubins\_Duration\_Command} structure, simply used to store the duration value for how long we wish to travel that given segment. This \textit{cmd} structure is then stored in memory, and will be accessed when it is time to complete the associated command. 
-
-The next step is to instruct the autopilot to perform an action upon executing each of these commands. The flow of operation followed by ArduPlane can be seen in Fig. \ref{fig:ArduPlaneFlow}
-
-The first command that was implemented was the dummy commanded which we had created for testing purposes. 
-
-\subsection{Stage 2: Implementation}
-\label{task2:stage2:implementation}
-
-\subsection{Stage 2: Testing}
-\label{task2:stage2:testing}
-
+\subsection{Stage 4: Flying a Dubins Path in the Presence of Wind}
+\label{task2:design:stage4}
 
 %******************************************************************************************************
 %******************************************************************************************************
-\section{Path Following - Stage 3: Flying Dubins Paths}
-\label{task2:stage1}
+\section{Path Following - Implementation}
+\label{task2:implementation}
 
-\subsection{Stage 3: Design and Planning}
-\label{task2:stage3:design}
+\subsection{Stage 1: Defining New Flight Commands}
+\label{task2:implementation:stage1}
 
-\subsection{Stage 3: Implementation}
-\label{task2:stage3:implementation}
+\subsection{Stage 2: Using New Flight Commands}
+\label{task2:implementation:stage2}
 
-\subsection{Stage 3: Testing}
-\label{task2:stage3:testing}
+\subsection{Stage 3: Flying a Dubins Path in the Absence of Wind}
+\label{task2:implementation:stage3}
+
+\subsection{Stage 4: Flying a Dubins Path in the Presence of Wind}
+\label{task2:implementation:stage4}
+
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[angle=90,origin=c,height=0.7\textheight]{32_20_RollComparison}
+\caption[]{roll comparison}
+\label{fig:32rollcomparison}
+\end{figure}
+
+
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Path Following - Testing}
+\label{task2:testing}
+
+The testing and verification techniques available are quite limited with regards to this task. By utilising the JSBSim based flight simulator we are able to simulate the flight of a given UAV over a mission we supply to it. After this, we can use the MAVExplorer utility to analyse the log files and to plot out a map with a trace of the UAVs flightpath compared to its mission.
+
+\subsection{Stage 1: Defining New Flight Commands}
+\label{task2:testing:stage1}
+
+\subsection{Stage 2: Using New Flight Commands}
+\label{task2:testing:stage2}
+
+\subsection{Stage 3: Flying a Dubins Path in the Absence of Wind}
+\label{task2:testing:stage3}
+
+\subsection{Stage 4: Flying a Dubins Path in the Presence of Wind}
+\label{task2:testing:stage4}
+
+
+
+1	0	3	85	2000	0	0	0	0	0	0	1
+2	0	3	87	2000	0	0	0	0	0	0	1
+3	0	3	85	2000	0	0	0	0	0	0	1

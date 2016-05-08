@@ -56,3 +56,36 @@ Appendices
 
 Bibliography
  
+
+
+
+
+
+Task 2:
+	Defining commands
+	Testing dummy command
+	commanding L,R,S
+	No-wind testing
+	-> roll timing tests with graphs
+	wind tests
+
+	conclusions
+
+*************************************************************************************
+*************************************************************************************
+*************************************************************************************
+TODO TODO TODO TODO 
+ consider re-organise into:
+	stage 1
+		design
+		implementation
+		testing
+	stage 2
+		design 
+		implementation
+		testing
+
+
+add dubins commands into cmd->mavlink function in LatestPlane\ardupilot\libraries\AP_Mission\AP_Mission.cpp
+Add print statements for commands to consol
+add code to run and verify dummy command
