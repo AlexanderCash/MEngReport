@@ -121,14 +121,19 @@ In this section we discuss the design, implementation, and testing phase of enab
 \subsection{Stage 2: Design and Implementation}
 \label{task2:stage2:design}
 
-The design of our final implementation is in fact very simple. The first step towards completing this stage is to convert the MAVLink message into a \textit{cmd} structure, as described in \cite{ArduPilotMAVLink}. To do this we add a case for each of our new commands to the function \textit{mavlink_to_mission_cmd} in \path{...ardupilot/libraries/AP\_Mission/AP\_Mission.cpp}. Each command issued to the autopilot via a MAVLink message is converted into an instance of a \textit{cmd} structure, which is itself composed of variables as well as a number of other data structures. To convert our message into one of these structures, we fill a data field in a \textit{Dubins\_Duration\_Command} structure, simply used to store the duration value for how long we wish to travel that given segment. This \textit{cmd} structure is then stored in memory, and will be accessed when it is time to complete the associated command. 
+The design of our final implementation is in fact very simple. The first step towards completing this stage is to convert the MAVLink message into a \textit{cmd} structure, as described in \cite{ArduPilotMAVLink}. To do this we add a case for each of our new commands to the function \textit{mavlink\_to\_mission\_cmd} in \path{...ardupilot/libraries/AP\_Mission/AP\_Mission.cpp}. Each command issued to the autopilot via a MAVLink message is converted into an instance of a \textit{cmd} structure, which is itself composed of variables as well as a number of other data structures. To convert our message into one of these structures, we fill a data field in a \textit{Dubins\_Duration\_Command} structure, simply used to store the duration value for how long we wish to travel that given segment. This \textit{cmd} structure is then stored in memory, and will be accessed when it is time to complete the associated command. 
 
-The next step is to instruct the autopilot to perform an action upon executing each of these commands. The flow of operation followed by ArduPlane can be seen in Fig. \ref{fig:ArduPlaneFlow}
+The next step is to instruct the autopilot to perform an action upon executing each of these commands. At the heart of ArduPlane is its scheduler, which it uses to periodically call a number of functions which include GPS updates, logging updates, and importantly, navigation updates. There are two scheduled functions we need to interact with; 
 
 The first command that was implemented was the dummy commanded which we had created for testing purposes. 
 
-\subsection{Stage 2: Implementation}
-\label{task2:stage2:implementation}
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[width=\textwidth]{Nav_flowdiagram}
+\caption[]{}
+\label{fig:navigateFlow}
+\end{figure}
+
 
 \subsection{Stage 2: Testing}
 \label{task2:stage2:testing}
