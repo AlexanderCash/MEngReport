@@ -133,7 +133,7 @@ As can be seen towards the bottom of the flow diagram, there is a point at which
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[height=0.9\textheight]{Navigate_FlowDiagram}
-\caption[]{}
+\caption[ArduPlane's update navigation program flow]{Flow diagram depicting how ArduPlane updates its navigation system}
 \label{fig:navigateFlow}
 \end{figure}
 
@@ -142,7 +142,7 @@ Within the \textit{commands\_logic.cpp}, the \textit{start\_command\_callback()}
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[height=0.5\textheight]{StartCommand_FlowDiagram}
-\caption[]{}
+\caption[Switch case to select the necessary command to execute]{A simple display of how the Dubins turn commands are called}
 \label{fig:startcommand}
 \end{figure}
 
@@ -227,11 +227,14 @@ The \textit{nav\_roll\_cd} variable is used to set our roll angle, measured in c
 %******************************************************************************************************
 %******************************************************************************************************
 \section{Path Following - Stage 3: Flying Dubins Paths}
-\label{task2:stage1}
+\label{task2:stage3}
 
 This stage of the task was aimed at testing the performance of our work as a whole, incorporating both our path planning application from Chapter 3 and our newly extended ArduPlane code. 
 
 The first test carried out, part way through the implementation stage, was to check that the dummy command implemented printed out a message as expected when included in a mission plan. This was very quick to confirm, and the desired message appeared in the console shortly followed by a message indicating the next mission command was being executed. This proved that the newly defined MAVLink messages were being read properly, and that the \textit{do\_} and \textit{verify\_} commands were working as intended.
+
+\subsection{Dubins Paths in the Absence of Wind}
+\label{task2:nowind}
 
 As mentioned in Chapter 3, it was known from early on in the project that this solution would not be perfect. A flight plan formed using a Dubins path would require the UAV to instantaneously roll from it maximum positive roll angle, to its maximum negative roll angle when switching from a right hand turn segment to a left hand turn segment. Accordingly, the next phase of this testing was to determine just how big a problem this would prove to be, and if there was a way to mitigate it with our current path following implementation. 
 
@@ -243,7 +246,7 @@ In order to calculate the turning radius of the UAV, a short derivation needs to
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[height=0.4\textheight]{BankedTurns}
-\caption[]{}%TODO captions
+\caption[The forces involved in banked turns]{A display of the force vectors affecting the turning radius of an aircraft through a banked turn}%TODO captions
 \label{fig:bankedTurns}
 \end{figure}
 
@@ -328,7 +331,7 @@ As we can see, the UAV is failing to correctly align itself with our imaging pat
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{65_20_NoWind}
-\caption[]{}
+\caption[Flying Dubins path turns in the absence of wind]{}
 \label{fig:6520nowind}
 \end{figure} 
 
@@ -363,18 +366,50 @@ By opening the \textit{.BIN} log file in MissionPlanner, it is possible to conve
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[angle=90,height=0.9\textheight]{65_20_cursors}
-\caption[]{}
+\caption[Comparing commanded roll angle with actual roll over time]{A comparison of the commanded roll angle with the actual roll angle over time, displaying the time delay between an angle being commanded and being achieved}
 \label{fig:6520cursors}
 \end{figure} 
 
-
-
-four differing configurations. The parameters that were changed were the commanded airspeed, and the maximum roll angle commanded by a Dubins path turn segment. The four configurations were as follows:
+These results clearly show that there is considerable lag between the roll command being issued, and the roll angle being reached. Additional to this problem is the actual roll behaviour being inconsistent; in some scenarios it overshoots its desired roll angle, and in others it does not reach it at all. The two types of roll scenario being displayed here are a change in the roll angle equivalent to the maximum roll angle (0\degree to +/-65\degree, or vice versa), and a change equivalent to double the maximum roll angle (+/-65\degree to-/+65\degree). Interestingly, there seems to be very little difference in time delay between these two scenarios, with both roughly equalling a 2 second lag. Continuing this investigation, a further three different flight configurations were also tested, with differing flight speeds and maximum roll angles. These other configurations were: 
 
 \begin{itemize}
-	\item Maximum roll angle of 65 degrees, flying at 20 metres per second (airspeed)
 	\item Maximum roll angle of 65 degrees, flying at 10 metres per second (airspeed)
 	\item Maximum roll angle of 32.5 degrees, flying at 20 metres per second (airspeed)
 	\item Maximum roll angle of 32.5 degrees, flying at 10 metres per second (airspeed)
 \end{itemize}
+
+%TODO explain why didnt test more configurations
+
+The plots for these three tests can be seen in Appendix %TODO appendix rollresults plots
+. As per Equation \ref{eq:turnradius}, decreasing the roll angle will increase the turning radius, whilst decreasing the airspeed will decrease the turning radius. Testing these four flight configurations was intended to determine whether changing either the roll angle or the airspeed would reduce the roll lag. 
+
+Comparing the results for the two pairs of tests flown with equal maximum roll angles shows that decreasing the speed had little to no effect on the roll lag. Comparing the results for the two pairs of tests flown with equal airspeeds shows that decreasing the maximum roll angle also reduces the roll lag. This seems reasonable, as the changes in roll are of course reduced. Interestingly, across all four tests the trace of the actuall roll angles were all very similarly shaped, with overshoots and undershoots occurring in the same ways across all configurations. This may be due to the way in which ArduPlane processes roll commands, but may also be due to the flight characteristics of the aircraft being simulated.
+
+
+Using these results, it can be hypothesised that this system will perform best with reduced roll angles as this will minimise the roll lag defined above, however doing so will increase the turning radius. By decreasing the flight speed, the turning radius is in turn reduced, shortening the overall turning path required between imaging paths. 
+
+This hypothesis was tested using the three previously defined flight configurations that had not been tested as of yet. The maps displaying the planned route versus flown route can be seen in Appendix %TODO put no wind 65_10, 32_20 etc in appendix
+. The path flown at the first corner of the mission should be completely ignored, because as mentioned before, the turning calculations were thrown off by ArduPlane refusing to fly at the prescribed airspeed. 
+
+The results for a 65\degree maximum bank angle flying at an airspeed of 10 metres per second seem strange at first glance. This is because that once completing the turning path, it was so far from the desired endpoint that the automatic flight navigation took over, to fly the UAV to the desired location. For the test performed with a 65\degree maximum bank angle flying at an airspeed of 20 metres per second, the shape differs as by time the flight commands were complete, the UAV had passed the waypoint, so ArduPlane continued to direct it along the imaging path. 
+
+When flying a 32.5\degree maximum bank angle at an airspeed of 20 metres per second, the turning radius of the UAV was very large, resulting in very long turning paths. This still however produced significant orientation error as well as location error, even though the maximum bank angle was reduced. The best performance was displayed using a 32.5\degree maximum bank angle and an airspeed of 10 metres per second. Here the turning radius was much smaller, resulting in far shorter overall turning paths and far less error in both location and orientation. 
+
+Across all configurations, one behaviour appears consistent; this system performs worst when the total angular change in orientation is large but change in location is small. The final turn performed is consistently the worst, when trying to perform a large change in orientation with no change in location, the UAV ends up in the wrong location with completely the wrong orientation. This ties in our with our previous findings about roll lag, because the Dubins path required to handle this type of turn typically consists of long turning segments. 
+
+The system performs best on the third turn, where the turning angle is reduced and there is some displacement between the start and endpoint of the manouevre. Even though it performs best on this turn, it is still far from perfect, with all flight configurations still displaying both displacement and alignment errors. 
+
+At this point it was clear that regardless of the wind condition and flight parameters, this system as a whole would never work perfectly. The error lies in the path planning phase, which does not take into account the true behaviour of the aircraft. 
+
+\subsection{Dubins Paths in the Presence of Wind}
+\label{task2:wind}
+
+Being fully aware of the failures of this system, it was tested in the presence of wind as much out of curiosity as anything else. Testing so far had shown that a maximum roll angle of 32.5\degree and an airspeed of 10 metres per second presented the best performance. Keeping this configuration, a mission was planned in an attempt to take into account the effect of an Easterly wind of 5 metres per second. Fig. \ref{fig:3220withwind} shows the results. The performance is so utterly dreadful that it is in fact difficult to work out from the trace the route the UAV actually flew. The effects of wind appear to have greatly exacerbated the pre-existing shortcomings of the system, whilst simultaneously affecting ArduPlanes ability to dictate a fixed airspeed. In its current form, this system is far less suitable for flying imaging paths in wind when compared with the current stock versions of ArduPlane. In its failed attempts to align with an imaging path it instead sends itself wildly off course, the corrections for which take a large amount of time and involve missing large sections of imaging path. The usage of battery is also far from ideal. Clearly this system is not suitable for a real-world application. 
+
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[width=\textwidth]{5Wind_32_20}
+\caption[An attempt at flying Dubins path turns in wind]{The new system's failed attempt at flying Dubins path turns in wind to align with imaging paths}
+\label{fig:3220withwind}
+\end{figure} 
 

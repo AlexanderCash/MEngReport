@@ -63,6 +63,11 @@ We can summarise our aims for this task as covering the following points:
 	\item Creating a standalone application to share the results of this work
 \end{itemize}
 
+%TODO finalise aims
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Path Planning - Design and Planning}
+\label{task1:design}
 
 As we can infer from the aims above, this task needed to be completed in a number of steps. To achieve this, the overall path planning tasks was split up into a number of stages, the order in which these were carried out is as follows:
 
@@ -73,26 +78,44 @@ As we can infer from the aims above, this task needed to be completed in a numbe
 	\item Implement this system as a standalone console application
 \end{enumerate}
 
+Throughout all stages of this task it was important to test the completed work to ensure we were prepared to move onto the next step. This was also important so as to minimise the risk of carrying bugs and errors forward throughout the project. As such there were testing steps carried out at for all stages, and these shall be documented in Section \ref{task1:testing}. 
 
-Throughout all stages of this task it was important to test the completed work to ensure we were prepared to move onto the next step. This was also important so as to minimise the risk of carrying bugs and errors forward throughout the project. 
-
-%TODO finalise aims
-%******************************************************************************************************
-%******************************************************************************************************
-\section{Path Planning - Stage 1: Plotting Dubins Paths in MATLAB}
-\label{task1:stage1}
-
-\subsection{Stage 1: Design}
-\label{task1:stage1:design}
-
+\subsection{Stage 1: Plotting Dubins Paths in MATLAB}
+\label{task1:design:stage1}
 
 The design process for this task was very simple, as the author was aware of the availability of the C based Dubins path application and associated MATLAB wrapper \cite{WalkerDubinsCurves,MexDubinsCurves}. From the start the author was aware of the risk of using unverified work, however by analysing the source code and comparing the mathematical calculations with those found in \cite{shkel2001classification}, it was deemed suitable to progress using these resources. After this analysis of the supplied code, the only work left in order to complete this stage would be to supply inputs to the Dubins application, process outputs, and plot the results.
 
 Throughout this stage we need to ensure that we are able to supply any combination of inputs to the program, specifying locations and orientations for both ends of the Dubins path as well as turning radius for our UAV.
 
-\subsection{Stage 1:Implementation}
-\label{task1:stage1:implementation}
+\subsection{Stage 2: Plotting the Effects of Wind on Dubins Paths}
+\label{task1:design:stage2}
 
+The next step for us to calculate the ground relative path followed by the UAV when commanded to fly a Dubins path in a wind condition. Regarding the air relative frame of reference, the UAV will be simply flying a Dubins path, however if we were to examine the GPS location data we would instead be seeing the UAV having flown a different path entirely. This stage is designed to be completed in MATLAB and to extend the capabilities of the program developed in stage 1. Alongside the original Dubins path plot we should plot the wind-affected path so as to easily allow comparison between the two. The plot should also display information about the wind vector to help visual inspection of the resulting paths. 
+
+
+\subsection{Stage 3: Generating an Air Relative Path Based on Desired Ground Relative Destination}
+\label{task1:design:stage3}
+
+This stage is where we finalise our new path planning system. For the application of aerial photography, the frame of reference that is most relevant to us is the ground relative frame. We want to be able to command the UAV to a location above a certain point on the ground, not a certain point in air. As such, we to implement a system that takes a desired destination, and calculates the air relative Dubins path. This Dubins path must of course take wind into consideration, as well as UAV orientations at either end of the turn alongside the UAV turning radius. Once again this is to be implemented entirely in MATLAB. 
+
+This will use a similar plot style to that produced in stage 2, allowing us to compare air and ground relative paths as well as the wind vector. This will hopefully enable us to quickly spot any glaring errors, as well as do some rudimentary estimations on whether the effect of wind is being calculated correctly.
+
+This system will be heavily based on the research discussed in Section \ref{litrev:path}, implementing the search algorithm as mentioned.
+
+\subsection{Stage 4: Creating a Standalone Console Application}
+\label{task1:design:stage4}
+
+The final step for completing the path planning part of this project is to create the console application. This console application will serve three main purposes; firstly it will form an integral part of path length calculation in the other project relating to this work, mentioned in Section \ref{intro}. Secondly it will enable us to do some fast and thorough testing of our path generation search algorithm, as will be discussed later. Finally, it will be used in the testing stages of the second task in this project, the path following task.
+
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Path Planning - Implementation}
+\label{task1:implementation}
+
+In this section we shall be discussing the implementation process for the task as a whole by discussing the implementation of each stage. 
+
+\subsection{Stage 1: Plotting Dubins Paths in MATLAB}
+\label{task1:implementation:stage1}
 
 This stage was, as expected, very straightforward. The first step was to first analyse the MATLAB Mex wrapper to ensure it was written as expected. Before using MATLAB's Mex function to convert the C\texttt{++} file into a MATLAB function, the \textit{dubins\_LSL}, \textit{dubins\_RSR}, \textit{dubins\_LSR}, \textit{dubins\_RSL}, \textit{dubins\_RLR}, and \textit{dubins\_LRL} functions were compared with \cite{shkel2001classification}. Thankfully the formulae and path length calculations matched up so were considered reliable. 
 
@@ -143,26 +166,8 @@ Fig. \ref{fig:pp1demo} shows the output of this program when given the following
 \label{fig:pp1demo}
 \end{figure}
 
-\subsection{Stage 1: Testing}
-\label{task1:stage1:testing}
-
-The primary testing phase for this stage was in fact more of a quality assurance process, stepping through the Mex application ensuring that the path formulae matched that of the research it was based on. This did pick up a small error, proving that it was a worthwhile endeavour. 
-
-Other than this, the testing process was limited to supplying a variety of inputs to the MATLAB code and visually inspecting the output plot. One slight problem that was found was that if the co-ordinates of the start and endpoints were identical, no path was calculated and plotted. To get around this we simply needed to ensure that the co-ordinates differed, if only by a miniscule amount. 
-
-
-%******************************************************************************************************
-%******************************************************************************************************
-\section{Path Planning - Stage 2: Plotting the Effects of Wind on Dubins Paths}
-\label{task1:stage1}
-
-\subsection{Stage 2: Design}
-\label{task1:stage2:design}
-
-The next step for us to calculate the ground relative path followed by the UAV when commanded to fly a Dubins path in a wind condition. Regarding the air relative frame of reference, the UAV will be simply flying a Dubins path, however if we were to examine the GPS location data we would instead be seeing the UAV having flown a different path entirely. This stage is designed to be completed in MATLAB and to extend the capabilities of the program developed in stage 1. Alongside the original Dubins path plot we should plot the wind-affected path so as to easily allow comparison between the two. The plot should also display information about the wind vector to help visual inspection of the resulting paths. 
-
-\subsection{Stage 2:Implementation}
-\label{task1:stage2:implementation}
+\subsection{Stage 2: Plotting the Effects of Wind on Dubins Paths}
+\label{task1:implementation:stage2}
 
 For this stage we needed to plot a Dubins path as before, but additionally plot its ground relative counterpart, calculated using a wind input. This required two additional parameters, the airspeed of the UAV, and a wind vector. 
 
@@ -205,39 +210,8 @@ This algorithm works by adding two additional rows to the output matrix from the
 
 The inputs for the results seen in \ref{fig:pp2demo} are exactly the same as for the test carried out in Section \ref{task1:implementation:stage1}, with the addition of a wind vector value and a UAV airspeed value. The airspeed chosen for the UAV was 18 metres per second, as this was the cruising speed of the UAV used by Dr Andrew Pomfret on his expedition to Svalbard. A windspeed of 10 metres per second was used, blowing in the negative x direction.
 
-\subsection{Stage 2: Testing}
-\label{task1:stage2:testing}
-
-As we had specified throughout that the wind vector was always pointing along the x axis, it was very easy to calculate expected offset in the x direction between the two paths as a result of wind. At the end of the MATLAB file for this stage we print out:
-
-\begin{itemize}
-	\item The start point of both paths and their orientation, equal to the values of $q_0$
-	\item The location and orientation of the end point of the air relative path, equal to $q_1$
-	\item The location and orientation of the end point of the ground relative path
-	\item The duration of the flight in seconds
-	\item The expected offset in the x axis as a result of wind. This was calculated by multiplying the wind vector with the flight duration
-	\item The actual offset in the x axis, calculated as the distance between the end points of the two path types
-\end{itemize}
-
-By printing out this information and running a number of tests, it was easy to quickly check that we were infact calculating a correct offset due to wind, all within the MATLAB console. 
-
-%******************************************************************************************************
-%******************************************************************************************************
-\section{Path Planning - Stage 3: }
-\label{task1:stage3}
-
-\subsection{Stage 3: Design}
-\label{task1:stage3:design}
-
-
-This stage is where we finalise our new path planning system. For the application of aerial photography, the frame of reference that is most relevant to us is the ground relative frame. We want to be able to command the UAV to a location above a certain point on the ground, not a certain point in air. As such, we to implement a system that takes a desired destination, and calculates the air relative Dubins path. This Dubins path must of course take wind into consideration, as well as UAV orientations at either end of the turn alongside the UAV turning radius. Once again this is to be implemented entirely in MATLAB. 
-
-This will use a similar plot style to that produced in stage 2, allowing us to compare air and ground relative paths as well as the wind vector. This will hopefully enable us to quickly spot any glaring errors, as well as do some rudimentary estimations on whether the effect of wind is being calculated correctly.
-
-This system will be heavily based on the research discussed in Section \ref{litrev:path}, implementing the search algorithm as mentioned.
-
-\subsection{Stage 3:Implementation}
-\label{task1:stage3:implementation}
+\subsection{Stage 3: Generating an Air Relative Path Based on Desired Ground Relative Destination}
+\label{task1:implementation:stage3}
 
 For this iteration of our path planning system, we need to implement our search algorithm to find a suitable air relative path to lead our UAV to the correct groud relative position. In this section we introduce the use of a virtual target, $vt$. The input parameters for this system are the same as in stage 2. 
 
@@ -307,25 +281,8 @@ The result of this can be seen in Fig. \ref{fig:pp3demo}, where the inputs were 
 \end{figure}
 
 
-\subsection{Stage 3: Testing}
-\label{task1:stage3:testing}
-
-By printing out the same information as printed out before, we can very easily see two important things; as before that we are calculating the correct wind offset, and that the ground relative path ends at the desired $d$ location. We can also compare the location of the $vt$ with the end point of the air relative path to ensure that we are still creating a correct Dubins path. All of this combined ensures that we can be confident that our algorithm is working, and that we are able to find an air relative path from a desired endpoint of the corresponding ground relative path. 
-
-Other than this, as before, a number of scenarios were tested and visually inspected to ensure the path shapes were as expected.
-
-%******************************************************************************************************
-%******************************************************************************************************
-\section{Path Planning - Stage 4: }
-\label{task1:stage4}
-
-\subsection{Stage 4: Design}
-\label{task1:stage4:design}
-
-The final step for completing the path planning part of this project is to create the console application. This console application will serve three main purposes; firstly it will form an integral part of path length calculation in the other project relating to this work, mentioned in Section \ref{intro}. Secondly it will enable us to do some fast and thorough testing of our path generation search algorithm, as will be discussed later. Finally, it will be used in the testing stages of the second task in this project, the path following task.
-
-\subsection{Stage 4:Implementation}
-\label{task1:stage4:implementation}
+\subsection{Stage 4: Creating a Standalone Console Application}
+\label{task1:implementation:stage4}
 
 The last work to complete for this task was to create a standalone console application version of the code in stage 3. This did not need to generate any plots, but must return the lengths of each segment of the chosen Dubins path. 
 
@@ -357,8 +314,45 @@ The finalised search algorithm is very similar to that developed in stage 3, con
 
 At a later stage in this project, another version of this console application was developed to take the orientation inputs in degrees rather than radians, and to display flight times for each segment as milliseconds rather than seconds. This was done mainly for the authors convenience, and was used to speed up the testing cycle of the path following section of this work. A screenshot of this modified console can be seen in Appendix %TODO appendix degrees console
 
-\subsection{Stage 4: Testing}
-\label{task1:stage4:testing}
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Path Planning - Testing}
+\label{task1:testing}
+
+In this section we shall be discussing the testing process for the task as a whole by discussing the testing of each stage. 
+
+\subsection{Stage 1: Plotting Dubins Paths in MATLAB}
+\label{task1:testing:stage1}
+
+The primary testing phase for this stage was in fact more of a quality assurance process, stepping through the Mex application ensuring that the path formulae matched that of the research it was based on. This did pick up a small error, proving that it was a worthwhile endeavour. 
+
+Other than this, the testing process was limited to supplying a variety of inputs to the MATLAB code and visually inspecting the output plot. One slight problem that was found was that if the co-ordinates of the start and endpoints were identical, no path was calculated and plotted. To get around this we simply needed to ensure that the co-ordinates differed, if only by a miniscule amount. 
+
+\subsection{Stage 2: Plotting the Effects of Wind on Dubins Paths}
+\label{task1:testing:stage2}
+
+As we had specified throughout that the wind vector was always pointing along the x axis, it was very easy to calculate expected offset in the x direction between the two paths as a result of wind. At the end of the MATLAB file for this stage we print out:
+
+\begin{itemize}
+	\item The start point of both paths and their orientation, equal to the values of $q_0$
+	\item The location and orientation of the end point of the air relative path, equal to $q_1$
+	\item The location and orientation of the end point of the ground relative path
+	\item The duration of the flight in seconds
+	\item The expected offset in the x axis as a result of wind. This was calculated by multiplying the wind vector with the flight duration
+	\item The actual offset in the x axis, calculated as the distance between the end points of the two path types
+\end{itemize}
+
+By printing out this information and running a number of tests, it was easy to quickly check that we were infact calculating a correct offset due to wind, all within the MATLAB console. 
+
+\subsection{Stage 3: Generating an Air Relative Path Based on Desired Ground Relative Destination}
+\label{task1:testing:stage3}
+
+By printing out the same information as printed out before, we can very easily see two important things; as before that we are calculating the correct wind offset, and that the ground relative path ends at the desired $d$ location. We can also compare the location of the $vt$ with the end point of the air relative path to ensure that we are still creating a correct Dubins path. All of this combined ensures that we can be confident that our algorithm is working, and that we are able to find an air relative path from a desired endpoint of the corresponding ground relative path. 
+
+Other than this, as before, a number of scenarios were tested and visually inspected to ensure the path shapes were as expected.
+
+\subsection{Stage 4: Creating a Standalone Console Application}
+\label{task1:testing:stage4}
 
 The testing for this stage was far more extensive than the previous stages, and for good reason, as it would be the tool used for all testing in the next task in the project. As discussed before, the results of the first stage of this testing altered the search algorithm at the centre of all of this work, resulting in quicker and simpler development. The way this was done was to create another application, using exactly the same search algorithm, and test a very broad range of scenarios. This second application, called \textit{AlignTest}, called the search algorithm thousands of times, each time with unique inputs, and printed the results to a file. These inputs were made up of all possible combinations of:
 
