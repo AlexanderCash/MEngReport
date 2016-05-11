@@ -84,20 +84,24 @@ Introduction
 Conclusions
 Summary sections
 search "Chapter" to make links clickable
-Data analysis of 589000 results, into table
-Add all MATLAB graphs to appendix
-Testing screenshots in Appendix
-Link appendix names
+Data analysis of 589000 results, into table ///
+Add all MATLAB graphs to appendix ///
+Testing screenshots in Appendix ///
+Link appendix names ///
 Mention where source code can be found
 Write readme for source code
+Talk about trade-off between path length and accuracy in current system
+
+
 
 
 APPENDICES
 
-- Degrees Console
-- MATLAB roll testing
-- No wind maps
-- Screenshot of mission planner with walmgate mission
-- A full mission plan
-- Roll test mission plan
-- Results of aligntest table
+- Degrees Console ///
+
+- MATLAB roll testing ///
+- No wind maps ///
+- Screenshot of mission planner with walmgate mission ///
+- A full mission plan ///
+- Roll test mission plan XXX
+- Results of aligntest table ///

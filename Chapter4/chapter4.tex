@@ -328,10 +328,9 @@ Now that the turning radius and the airspeed are known quantities, a mission pla
 	\item Insert new commands into mission plan between the relevent waypoints
 \end{enumerate}
 
-An example of one of these mission plans can be seen in Appendix %TODO appendix a mission plan
+An example of one of these mission plans can be seen in Appendix \ref{app:missionplan}.
 
-A mission plan was created to fly the mission displayed in Appendix %TODO appendix screenshot of mission planner
-, performing Dubins path turns at waypoint 2, between waypoints 3 and 4, 5 and 6, and at waypoint 7. When performing one of these new turns about a single waypoint, the technique is being used in attempt to only re-align the UAV with the path, as opposed to translating the position of the UAV as well as re-aligning it. 
+A mission plan was created to fly the mission displayed in Appendix \ref{app:MissionPlanner}, performing Dubins path turns at waypoint 2, between waypoints 3 and 4, 5 and 6, and at waypoint 7. When performing one of these new turns about a single waypoint, the technique is being used in attempt to only re-align the UAV with the path, as opposed to translating the position of the UAV as well as re-aligning it. 
 
 In the first test of the finished system, the UAV was commanded to fly at 20 metres per second airspeed, in the absence of wind. Fig. \ref{fig:6520nowind} shows both the planned route, and the route the UAV actually flew. Please note that the waypoint numbering in the simulator becomes inaccurate once the additional commands are added to the mission plan. 
 
@@ -340,7 +339,7 @@ As we can see, the UAV is failing to correctly align itself with our imaging pat
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{65_20_NoWind}
-\caption[Flying Dubins path turns in the absence of wind]{}
+\caption[Flying Dubins path turns in the absence of wind]{A trace of the path the UAV flew when commanded to fly in the absence of wind, with a 65\degree  maximum roll angle, and at an airsped of 20 metres per second}
 \label{fig:6520nowind}
 \end{figure} 
 
@@ -367,8 +366,7 @@ This series of commands creates 6 transitionas between Dubins path segments. Per
 	\item L \textrightarrow S
 \end{enumerate}
 
-This mission plan, availabe in Appendix %TODO appendix roll test mission plan
-, was then flown with the same configuration as for the test shown in Fig. \ref{fig:6520nowind}; namely, with a maximum roll angle of 65\degree and at an airspeed of 20 metres per second. 
+This mission plan was then flown with the same configuration as for the test shown in Fig. \ref{fig:6520nowind}; namely, with a maximum roll angle of 65\degree and at an airspeed of 20 metres per second. 
 
 By opening the \textit{.BIN} log file in MissionPlanner, it is possible to convert it into a MATLAB \textit{.mat} file. Processing the results in MATLAB, the values for commanded roll and actual roll were plotted, as seen in \ref{fig:6520cursors}. 
 
@@ -389,16 +387,14 @@ These results clearly show that there is considerable lag between the roll comma
 
 %TODO explain why didnt test more configurations
 
-The plots for these three tests can be seen in Appendix %TODO appendix rollresults plots
-. As per Equation \ref{eq:turnradius}, decreasing the roll angle will increase the turning radius, whilst decreasing the airspeed will decrease the turning radius. Testing these four flight configurations was intended to determine whether changing either the roll angle or the airspeed would reduce the roll lag. 
+The plots for these three other tests can be seen in Appendix \ref{app:MATLABRoll}. As per Equation \ref{eq:turnradius}, decreasing the roll angle will increase the turning radius, whilst decreasing the airspeed will decrease the turning radius. Testing these four flight configurations was intended to determine whether changing either the roll angle or the airspeed would reduce the roll lag. 
 
 Comparing the results for the two pairs of tests flown with equal maximum roll angles shows that decreasing the speed had little to no effect on the roll lag. Comparing the results for the two pairs of tests flown with equal airspeeds shows that decreasing the maximum roll angle also reduces the roll lag. This seems reasonable, as the changes in roll are of course reduced. Interestingly, across all four tests the trace of the actuall roll angles were all very similarly shaped, with overshoots and undershoots occurring in the same ways across all configurations. This may be due to the way in which ArduPlane processes roll commands, but may also be due to the flight characteristics of the aircraft being simulated.
 
 
 Using these results, it can be hypothesised that this system will perform best with reduced roll angles as this will minimise the roll lag defined above, however doing so will increase the turning radius. By decreasing the flight speed, the turning radius is in turn reduced, shortening the overall turning path required between imaging paths. 
 
-This hypothesis was tested using the three previously defined flight configurations that had not been tested as of yet. The maps displaying the planned route versus flown route can be seen in Appendix %TODO put no wind 65_10, 32_20 etc in appendix
-. The path flown at the first corner of the mission should be completely ignored, because as mentioned before, the turning calculations were thrown off by ArduPlane refusing to fly at the prescribed airspeed. 
+This hypothesis was tested using the three previously defined flight configurations that had not been tested as of yet. The maps displaying the planned route versus flown route can be seen in Appendix \ref{app:NoWindMaps}. The path flown at the first corner of the mission should be completely ignored, because as mentioned before, the turning calculations were thrown off by ArduPlane refusing to fly at the prescribed airspeed. 
 
 The results for a 65\degree maximum bank angle flying at an airspeed of 10 metres per second seem strange at first glance. This is because that once completing the turning path, it was so far from the desired endpoint that the automatic flight navigation took over, to fly the UAV to the desired location. For the test performed with a 65\degree maximum bank angle flying at an airspeed of 20 metres per second, the shape differs as by time the flight commands were complete, the UAV had passed the waypoint, so ArduPlane continued to direct it along the imaging path. 
 
