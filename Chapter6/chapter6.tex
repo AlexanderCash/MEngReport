@@ -1,16 +1,206 @@
 %******************************** Sixth Chapter *******************************************************
 %******************************************************************************************************
+
+\externaldocument{{../Chapter1/chapter1}}
+\externaldocument{{../Chapter2/chapter2}}
+\externaldocument{{../Chapter3/chapter3}}
+\externaldocument{{../Chapter4/chapter4}}
+\externaldocument{{../Chapter5/chapter5}}
+\externaldocument{{../Chapter7/chapter7}}
+\externaldocument{{../Appendix1/appendix1}}
+\externaldocument{{../Appendix2/appendix2}}
+\externaldocument{{../Appendix3/appendix3}}
+\externaldocument{{../Appendix4/appendix4}}
+\externaldocument{{../Appendix5/appendix5}}
+\externaldocument{{../Appendix6/appendix6}}
+\externaldocument{{../Appendix7/appendix7}}
+
+
+% **************************** Define Graphics Path **************************
+\graphicspath{{Chapter6/Figs/}}
+
+
+
+%******************************************************************************************************
+%******************************************************************************************************
 \chapter{Project Planning and Management}
 \label{planning}
 
-% **************************** Define Graphics Path **************************
-\ifpdf
-    \graphicspath{{Chapter6/Figs/Raster/}{Chapter6/Figs/PDF/}{Chapter6/Figs/}}
-\else
-    \graphicspath{{Chapter6/Figs/Vector/}{Chapter6/Figs/}}
-\fi
+This chapter will discuss the planning techniques used throughout this project, as well as discussing some of the problems encountered and overcome. Included in this chapter is a brief risk assessment which details how potential risks to the project were mitigated.
+
+
 
 %******************************************************************************************************
 %******************************************************************************************************
 \section{Agile Planning}
 \label{planning:agile}
+
+As this project was entirely software based, there was some choice in the planning techniques available. The methodology employed was that of agile development, chosen for its flexibility, adaptability, and due to the author's familiarity with the process. From the beginning it was clear that it would be hard to provide time estimates for a number of tasks, due to working with an already established code base. By using an agile methodology it was possible to plan based on features rather than time allocation, which provided a level of flexibility necessary to deal with the levels of uncertainty resulting from extending the work of others. 
+
+As our two tasks discussed in Chapters \ref{task1} and \ref{task2} were distinct from one another, so were the planning processes. As such, they shall be discussed separately.
+
+As this project was an independent endeavour certain aspects of the traditional agile process were excluded, including stand-up meetings and retrospective meetings. By treating the project supervisor as both the customer and as a stakeholder, we still ensured regular meetings to discuss progress and features. These meetings provided a means to keep the project progressing in the correct direction by discussing planned features and how they fit into a finished product.
+
+With regards to the planning, each of the two main tasks was treated as an ``Epic''. These epics were then broken down into ``Features'' and then further into ``User Stories''. This hierarchical design plan meant that the two epics could be worked on independent of one another, removing the need for a linear task-by-task approach. Fig. \ref{fig:AgileTree} shows how these tasks are structured. 
+
+When using agile, a ``Spike'' occurs if there is a point at which research or investigation needs to be completed before other work can progress. Spikes were only used in this project to define research or investigation that occurred once other practical work had started, and as such research and the literature review completed before the project proper do not qualify as spikes.
+
+\begin{figure}[htbp!] 
+\centering    
+\includegraphics[width=0.8\textwidth]{AgileTree}
+\caption[Agile planning task breakdown]{A display of the hierarchy of tasks used in agile planning}
+\label{fig:AgileTree}
+\end{figure} 
+
+
+\subsection{Agile Planning: Path Planning}
+\label{planning:agile:planning}
+
+The first step for this task was to define the epic that was being worked towards to serve as the overall aim for the task. After some consideration and discussion with the project supervisor, the Epic was specified as
+
+\begin{displayquote}
+	``To provide a path planning utility to enable a user to plan a turn using a Dubins path, in the presence of wind''
+\end{displayquote}
+
+This epic was then described via a number of product features, which were:
+\begin{enumerate}
+	\item Produced Dubins paths can be described as three distinct segments, using turning direction and segment length
+	\item The user can calculate a Dubins path based on a series of inputs relevant to their UAV usage scenario
+	\item The system can calculate the effects of wind on the travelled path, and compensate for it
+\end{enumerate}
+
+We are able to treat each of these features as iterations in the scope of this project. Strictly speaking this may not be correct for the agile methodology in an industry setting, however because this work was being completed by one person, testing could not be carried out concurrently with development. As such, each feature was implemented and tested before moving on to the next feature, thus they have been treated as iterations. Where necessary, re-factoring was performed when testing failed or highlighted problems. After re-factoring testing was repeated before moving on to the next iteration.
+
+Continuing on from their definitions, each feature was further described using one or more user stories:
+
+\begin{table}[h!]
+\centering
+\caption{The breakdown of features into user stories for the path planning task\label{tab:task1planning}}
+ \begin{tabular}{p{0.4\textwidth} | p{0.5\textwidth}}
+	\hline
+	\textbf{Feature} & \textbf{User Story} \\
+	\hline
+	\hline
+	\multirow{2}{0.4\textwidth}{Produced Dubins paths can be described as three distinct segments, using turning direction and segment length} & As a user, I am informed of the Dubins path type because it is information I need to edit a mission plan \\
+	\\
+	& As a user, I am informed of the length of each path segment because it is information I need to edit a mission plan\\
+	\hline
+	\multirow{3}{0.4\textwidth}{The user can calculate a Dubins path based on a series of inputs relevant to their UAV usage scenario} & As a user, I am able to specify the speed and turning radius of the UAV because I need to cater to the UAV platform I am using\\
+	\\
+	& As a user, I am able to specify the speed and direction of wind because I need the system to consider the wind where I am flying my UAV\\
+	\\
+	& As a user, I am able to specify the start and end locations and orientations so that I can generate a suitable path\\
+	\hline
+	\multirow{2}{0.4\textwidth}{The system can calculate the effects of wind on the travelled path, and compensate for it} & As a user, I can specify a desired ground-relative end point, and be presented with the air relative Dubins path necessary to reach it, because I do not have accurate knowledge of the offset the wind will generate\\
+	\\
+	& As a user, I receive Dubins paths for flight to a destination both with and without the effects of wind so I can examine the impact of wind on the flight path and battery requirements\\
+	\hline
+ \end{tabular}
+\end{table}
+
+These user stories were satisfied by the console application produced, irrespective of the failings of the system as a whole. We can imagine the user stories listed here as comprising the first release of the path planning system, as once complete they offer a complete system with which the user can interact. If time had permitted, the next release for this system would have integrated it into either APM Planner 2 or MissionPlanner. This would have have been a most agreeable addition that would have massively reduced the time required to test the system, as creating mission plans would have been straightforward and not required manual editing of mission plans. However this was not planned out during the project, as that would have represented planning the next release before the current one was complete, which would be at odds with the methodology in use.
+
+As previously mentioned, the aim of using this planning style was to organise the project via features and functionality, rather than by time. In this respect it proved very beneficial, as no hard deadlines were placed on the work, instead the product was considered complete once all of the features were implemented. 
+%TODO finalise ?
+
+\subsection{Agile Planning: Path Following}
+\label{planning:agile:following}
+
+The epic for this task must reference the integration of the solution with the path planning solution, as without it this task is relatively meaningless. The epic itself is in fact very simple, and reads
+
+\begin{displayquote}
+	``To implement changes to ArduPlane to allow it to fly a Dubins path''
+\end{displayquote}
+
+With this short description we are able to regard this task as independent, yet related to the path planning task. The mention of Dubins paths signifies its interaction with the path planning solution, however does not imply it as being absolutely necessary to this task.
+
+As touched upon in Chapter \ref{task2}, the current implementation was not the first implementation attempted. As such, it was not the first planned implementation, meaning that the planning information presented here was not the first planning information generated. Thus, the features and user stories here were the ones used to implement the final solution, but have changed over time. This is another benefit of the agile methodology, as when problems were encountered, the plan was quickly adapted to suit the needs of the project. 
+
+The features derived from the epic are as follows
+\begin{enumerate}
+	\item ArduPlane must recognise control messages and commands relating to flying a Dubins path
+	\item ArduPlane must navigate according to the new control messages to perform a Dubins path turn
+	\item The implemented changes must not negatively impact the pre-existing navigation systems of ArduPlane
+\end{enumerate}
+
+As before these features have been treated as iterations. And once again we can look at these features more closely by expressing them as user stories@
+
+\begin{table}[h!]
+\centering
+\caption{The breakdown of features into user stories for the path following task\label{tab:task2planning}}
+ \begin{tabular}{p{0.4\textwidth} | p{0.5\textwidth}}
+	\hline
+	\textbf{Feature} & \textbf{User Story} \\
+	\hline
+	\hline
+	\multirow{2}{0.4\textwidth}{ArduPlane must recognise control messages and commands relating to flying a Dubins path} & As a user, I want ArduPlane to recognise the commands I am issuing because they are necessary to navigate my UAV \\
+	\\
+	&  As a user, I want ArduPlane to recognise all of the commands required to fly a Dubins path because otherwise my UAV will not navigate to the right location\\
+	\hline
+	\multirow{3}{0.4\textwidth}{ArduPlane must navigate according to the new control messages to perform a Dubins path turn} &  As a user, ArduPlane must perform L,R, and S segments according to my commands so as to complete a Dubins path\\
+	\\
+	&  As a user, ArduPlane must perform these segments for the specified duration or else the Dubins path will not be useful to me\\
+	\\
+	&   As a user, ArduPlane must turn as instructed otherwise my UAV will not align with my imaging paths\\
+	\hline
+	\multirow{2}{0.4\textwidth}{The implemented changes must not negatively impact the pre-existing navigation systems of ArduPlane} &  As a user, automatic flight mode must still work, because the majority of my missions are flown in automatic mode\\
+	\\
+	&  As a user, new features must not regress the autopilot as a whole as I use it for a number of tasks other than aerial photography \\
+	\hline
+ \end{tabular}
+\end{table}
+
+
+Once more there were future releases in mind that were not able to be realised as a result of time constraints. The second release would have been a primarily re-factoring phase, with changes to both the path planning and following solutions being made as a result of simulator testing. Following this a tertiary release cycle was in mind, primarily aimed at testing the system on a real UAV as opposed to a simulated one. Changes would have been required on the path following system to adapt it to the flight characteristics of the chosen UAV.
+
+\subsection{Previous Implementation Attempts}
+\label{planning:agile:previous}
+
+The previous attempts at solving the path following problem have not been discussed yet, but are worth mentioning here. The initial plan involved creating a ``DUBINS'' flight mode, which would be responsible for handling all navigation whilst performing a Dubins path turn. Although the new flight mode was successfully added, a number of problems arose when attempting to use it. The primary issue appeared when trying to switch to and from AUTO mode to the new flight mode. In doing so, the mission plan was not being read correctly and ArduPlane was detecting a problem and would return to its launch location. This is a failsafe behaviour of ArduPlane that occurs when it determines no mission plan is currently active. After numerous attempts to enable the mission to continue via a range of techniques, this approach was abandoned and the approach described above was adopted.
+
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Problems Overcome}
+\label{planning:problems}
+
+Sadly, this project suffered greatly due to a number of unforeseen problems. Luckily, the path planning task was able to progress unhindered, with no major delays or setbacks, however the path following solution bore the brunt of these problems. 
+
+The first major problem was encountered when attempting to build the ArduPlane code for the first time. It is still unclear why, but the instructions provided by the ArduPilot project for building the code on a Windows operating system were either incorrect or incomplete. Attempts were made to compile a wide range of ArduPlane versions, using a series of different tools and techniques. None of them seemed to work, no matter how much time was dedicated to it. The solution to this problem was to carry out the work on a Linux operating system; the distribution chosen was Ubuntu due to the author's familiarity with the platform. This change allowed the code to be compile by making use of Linux's ``make'' command, which compiled the code first time with no issues. 
+
+Another problem arose as a result of ambitions for the direction of the project. As mentioned above, it was hoped that this project would eventually be tested on a real UAV, which would require the presence of a controller board. As mentioned in \ref{intro:hardware}, the two popular and readily available boards are the Pixhawk and the APM 2.x series of boards. In recent months the ArduPilot project has ceased to support the APM 2.x series of controller boards in favour of the more powerful Pixhawk boards. However, APM 2.x boards are still available for purchase, and slightly older version of ArduPlane are still compatible with them. Because of the large price difference between the two options, and the financial constraints on this project, it was decided that the base version to work from should be an older version of the code suitable for the APM boards. This was an attempt at forward planning in case the opportunity arose to test the system on a real UAV. 
+
+There is documentation available on the ArduPilot developer wiki that can allow a user to build the code for a Pixhawk board using the Eclipse IDE when using a Windows operating system. However all documentation and attempts by the author to use an IDE to build the code on any platform failed miserably. As a result, the majority of the time spent working on the path following solution was spent developing using simply a text editor and the command line to build the code. This slowed down implementation massively, as the codebase was large, complex, and highly genericized meaning that tracing the program flow was difficult. In addition, it was almost impossible to work out the call hierarchy for any function, due to the way in which generic libraries were utilised in ArduPlane.
+
+Towards the latter stages of the project, it was realised that as time was running out, it was unlikely that a real-world test would be able to be carried out. As time was running out it was becoming very clear that the only solution was to find some way to get the code to build in a proper IDE. With a lot of perseverance, guess-work and a touch of luck, the code was able to be imported into Eclipse on Linux, even though there was no documentation online suggesting this was possible. One change that was necessary to make however was to move to a slightly different version branch, which meant a number of changes needed to be re-added, using up yet more time. 
+
+The change to a new version was important, as the new branch being used had been released after the ArduPilot project had moved away form their Arduino based roots to a more C\texttt{++} dominant implementation. It was this change that enabled the compilation of the code in Eclipse, as previously a large proportion of the code was implemented in Arduino-based \textit{.pde} files, which Eclipse did not work well with.
+
+The final issue worth discussing was encountered with the simulator; contrary to instructions available online \cite{ArduPilotSITL}, the simulator measures wind in feet per second, not metres per second. This meant that for a long period of time, simulations that were intended to have a 5 metres per second wind were in fact being carried out with a 1.5 metres per second wind. The confusion following this wasted yet more time.
+
+In summary, this project was plagued with delays. As discussed throughout the report, it was well known from the planning stages that the solution being implemented would not be perfect. The initial thinking was that it would be relatively straightforward to implement this system and then build on it and adapt it to improve performance. Due to the sheer number of setbacks and unfavourable platform issues, there simply was not enough time to do so. It is a great shame, as this project had a lot more potential than was displayed.
+
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Risk Management}
+\label{planning:risks}
+
+Throughout the project there were a number of potential risks identified and taken into consideration. The following table lists these perceived risks, the negative impact (on a scale of 1 - 10) on the project should they have occurred, and steps taken to mitigate these risks: 
+
+\begin{table}[h!]
+\centering
+\caption{Risk assessment breakdown for the project as a whole\label{tab:riskassessment}}
+ \begin{tabular}{p{0.3\textwidth} | p{0.1\textwidth} | p{0.4\textwidth}}
+	\hline
+	\textbf{Risk} & \textbf{Impact} & \textbf{Mitigation} \\
+	\hline
+	\hline
+	Loss of code & 9 & Use of file versioning system ``git'' alongside remote storage on GitHub massively reduces the risk of this occurring. In addition, local copies were regularly updated on two different computers \\
+	\hline
+	Injury whilst testing real UAV & 4 & Although this would have been terrible, it would not necessarily have impacted the project itself all that much. Regardless, this risk never had to be mitigated as real-world testing was never completed \\
+	\hline
+	Failure to deliver solutions to one or both of the tasks for this project & 7 & The impact would be considerable, as failure to deliver any solution would be regrettable. A solution with flaws would be preferable. To mitigate this, the planning process ensured that with enough time allocated to the work, at the least some minimal solutions would be created \\
+	\hline
+ \end{tabular}
+\end{table}
+
+With all things considered there were very few genuine risks to this project. That being said, it did fall foul of one of the risks listed above. Early on in the project, git was being used with a relatively new front-end user interface, so as to easily visiualise progress and branch hierarchies. This front-end product was in beta, however had received a number of positive review online. Due to some unknown communication error, a number of commits to the code were never pushed to the remote repository, and the program locked up. Not noticing that the changes had not been pushed, the author switched to using command line git as the front-end interface was not all that useful after all. In the process of uninstalling the program, these commits were somehow lost, and along with it a fair amount of code. Luckily this was early on, so not a huge amount had been implemented, and the changes to ArduPlane were successfully re-implemented.

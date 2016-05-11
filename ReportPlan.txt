@@ -75,17 +75,29 @@ Task 2:
 *************************************************************************************
 *************************************************************************************
 TODO TODO TODO TODO 
- consider re-organise into:
-	stage 1
-		design
-		implementation
-		testing
-	stage 2
-		design 
-		implementation
-		testing
 
 
-add dubins commands into cmd->mavlink function in LatestPlane\ardupilot\libraries\AP_Mission\AP_Mission.cpp
-Add print statements for commands to consol
-add code to run and verify dummy command
+ctrl+f TODO
+Run spellcheck
+remove "we", and "our"
+Introduction
+Conclusions
+Summary sections
+search "Chapter" to make links clickable
+Data analysis of 589000 results, into table
+Add all MATLAB graphs to appendix
+Testing screenshots in Appendix
+Link appendix names
+Mention where source code can be found
+Write readme for source code
+
+
+APPENDICES
+
+- Degrees Console
+- MATLAB roll testing
+- No wind maps
+- Screenshot of mission planner with walmgate mission
+- A full mission plan
+- Roll test mission plan
+- Results of aligntest table
