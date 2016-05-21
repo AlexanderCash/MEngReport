@@ -37,7 +37,7 @@ The solutions proposed here are intended to be used in conjunction with the chos
 \section{Path Planning - Aims}
 \label{task1:aims}
 
-This section of work is aimed at producing a system to enable us to both plan and define paths for the UAV to follow. The paths we need to produce must in fact be sections of larger mission plans, and must be used to enable the UAV to travel between the end of one imaging path and the start of the next. Stock ArduPlane can of course offer this, but what it cannot offer is the abilty to ensure the UAV is aligned with the imaging path before beginning to travel along it. This, in essence, is the simplest definition for this task; to define flight paths that enable the UAV to correctly align itself with a given imaging path prior to starting it.  
+This section of work is aimed at producing a system to enable us to both plan and define paths for the UAV to follow. The paths we need to produce must in fact be sections of larger mission plans, and must be used to enable the UAV to travel between the end of one imaging path and the start of the next. Stock ArduPlane can of course offer this, but what it cannot offer is the ability to ensure the UAV is aligned with the imaging path before beginning to travel along it. This, in essence, is the simplest definition for this task; to define flight paths that enable the UAV to correctly align itself with a given imaging path prior to starting it.  
 
 Fig. \ref{fig:baseArduPlane} shows the results of a simulated flight using the stock, currently released version of ArduPlane. The mission for this simulation was planned to give an idea of how ArduPlane performs at the moment, and how its current waypoint navigation system does not enable us to align with imaging paths. If we imagine that the three vertically aligned paths between waypoints 2 and 3, 4 and 5, and 6 and 7 are imaging paths, we can clearly see that our UAV would be missing considerable sections of these important paths. The result of this would be that the images captured may entirely miss areas of land towards the beginning of these paths. 
 
@@ -46,35 +46,33 @@ Currently in ArduPlane, the only way to ensure our UAV is aligned with an imagin
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=0.8\textwidth]{BaseArduPlane}
-\caption[Stock ArduPlane Path Tracking]{Results of a flight simulation using stock ArduPlane}
+\caption[Stock ArduPlane path tracking]{Results of a flight simulation using stock ArduPlane}
 \label{fig:baseArduPlane}
 \end{figure}
 
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=0.4\textwidth]{WaypointManipulation}
-\caption[Aligning With an Imaging Path in Stock ArduPlane]{One solution for aligning with an imaging path in the current version of ArduPlane via waypoint manipulation}
+\caption[Aligning with an imaging path in stock ArduPlane]{One solution for aligning with an imaging path in the current version of ArduPlane via waypoint manipulation}
 \label{fig:waypoingmanipulation}
 \end{figure}
 
-One of the problems we have is that ArduPlane navigates via straight lines drawn between points and has no concept of pre-emptive flight control or prioritisation of path sections. We can utilise Dubins paths as described in Section \ref{litrev:dubins} to decribe the shortest path possible between imaging paths that take the orientation of the UAV into consideration. We can then extend this work using the research discussed in Section \ref{litrev:path} to also handle the effects of wind on navigation. Using these techniques, we can introduce extra navigation steps at the planning stage that will in effect prioritise our imaging paths by ensuring the UAV arrives at the start of the path with the correction orientation and direction of travel. If a solution were to be implemented into the mission planning software, it would enable the user to specify the start and end points of imaging runs, and automatically calculate the desired Dubins path between them. 
+One of the problems we have is that ArduPlane navigates via straight lines drawn between points and has no concept of pre-emptive flight control or prioritisation of path sections. We can utilise Dubins paths as described in Section \ref{litrev:dubins} to describe the shortest path possible between imaging paths that take the orientation of the UAV into consideration. We can then extend this work using the research discussed in Section \ref{litrev:path} to also handle the effects of wind on navigation. Using these techniques, we can introduce extra navigation steps at the planning stage that will in effect prioritise our imaging paths by ensuring the UAV arrives at the start of the path with the correction orientation and direction of travel. If a solution were to be implemented into the mission planning software, it would enable the user to specify the start and end points of imaging runs, and automatically calculate the desired Dubins path between them. 
 
 As mentioned in Section \ref{intro}, this project is being run in parallel with another project investigating a related area of work. This other project is interested in path optimisation, for which one important feature is of course length. It was decided that this optimisation research should utilise the results of this work when calculating path lengths, suggesting the integration of the two projects at a later date. The result of this is that an additional aim for this task is to be able to share the system generated here for use in other work. It was decided that the best way to do this would be to create a standalone console application that could be compiled and shared, which took a number of parameters and returned details about the resulting paths. This shall be discussed further along with the other implementation work.
 
 In effect we aim to introduce a new turning technique to the autopilot system, and the first stage of completing this is to be able to plan paths that define these turns. The result of this work will be effectively replacing the straight lines currently joining the ends of imaging paths with curved turns in the form of Dubins paths. We place no importance on the route travelled between the imaging paths, so we can replace the current paths with our own in order to prioritise aligning with imaging paths. By utilising Dubins paths we will also be improving battery life, as by their very definition DUbins paths are the shortest suitable routes we can take. 
 
-We can summarise our aims for this task as covering the following points:
+As will be discussed in Chapter \ref{planning}, this task was defined in terms of product features, which are:
 
 \begin{itemize}
-	\item Being able to calculate suitable Dubins paths for a given UAV platform, taking into consideration its turning radius
-	\item Being able to calculate suitable Dubins paths for a given UAV platform flying in a given wind condition
-	\item Being able to define the resulting Dubins paths segments, either via location or length
-	\item Allowing a user to specify a start and end point with prescribed orientation for our Dubins paths in all scenarios
-	\item Creating a standalone application to share the results of this work
+	\item Produced Dubins paths can be described as three distinct segments, using turning direction and segment length
+	\item The user can calculate a Dubins path based on a series of inputs relevant to their UAV usage scenario
+	\item The system can calculate the effects of wind on the travelled path, and compensate for it
 \end{itemize}
 
 
-As we can infer from the aims above, this task needed to be completed in a number of steps. To achieve this, the overall path planning tasks was split up into a number of stages, the order in which these were carried out is as follows:
+As we can infer from the features above, this task needed to be completed in a number of steps. To achieve this, the overall path planning tasks was split up into a number of stages, the order in which these were carried out is as follows:
 
 \begin{enumerate}
 	\item Plot Dubins paths in MATLAB
@@ -86,7 +84,6 @@ As we can infer from the aims above, this task needed to be completed in a numbe
 
 Throughout all stages of this task it was important to test the completed work to ensure we were prepared to move onto the next step. This was also important so as to minimise the risk of carrying bugs and errors forward throughout the project. 
 
-%TODO finalise aims
 %******************************************************************************************************
 %******************************************************************************************************
 \section{Path Planning - Stage 1: Plotting Dubins Paths in MATLAB}
@@ -100,7 +97,7 @@ The design process for this task was very simple, as the author was aware of the
 
 Throughout this stage we need to ensure that we are able to supply any combination of inputs to the program, specifying locations and orientations for both ends of the Dubins path as well as turning radius for our UAV.
 
-\subsection{Stage 1:Implementation}
+\subsection{Stage 1: Implementation}
 \label{task1:stage1:implementation}
 
 
@@ -149,7 +146,7 @@ Fig. \ref{fig:pp1demo} shows the output of this program when given the following
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{PP1_Demo}
-\caption[stage 1: Plotting Dubins Paths in MATLAB]{The plot results of stage 1 in MATLAB demonstrating a simple RLR Dubins path}
+\caption[Plotting Dubins paths in MATLAB]{The plot results of stage 1 in MATLAB demonstrating a simple RLR Dubins path}
 \label{fig:pp1demo}
 \end{figure}
 
@@ -158,13 +155,13 @@ Fig. \ref{fig:pp1demo} shows the output of this program when given the following
 
 The primary testing phase for this stage was in fact more of a quality assurance process, stepping through the Mex application ensuring that the path formulae matched that of the research it was based on. This did pick up a small error, proving that it was a worthwhile endeavour. 
 
-Other than this, the testing process was limited to supplying a variety of inputs to the MATLAB code and visually inspecting the output plot. One slight problem that was found was that if the co-ordinates of the start and endpoints were identical, no path was calculated and plotted. To get around this we simply needed to ensure that the co-ordinates differed, if only by a miniscule amount. 
+Other than this, the testing process was limited to supplying a variety of inputs to the MATLAB code and visually inspecting the output plot. One slight problem that was found was that if the co-ordinates of the start and endpoints were identical, no path was calculated and plotted. To get around this we simply needed to ensure that the co-ordinates differed, if only by a minuscule amount. 
 
 
 %******************************************************************************************************
 %******************************************************************************************************
 \section{Path Planning - Stage 2: Plotting the Effects of Wind on Dubins Paths}
-\label{task1:stage1}
+\label{task1:stage2}
 
 \subsection{Stage 2: Design}
 \label{task1:stage2:design}
@@ -186,7 +183,7 @@ Using these values along with the input to define the airspeed of the UAV, we ca
 
 At this point we now know the time difference between each reading and are ready to start adding the effects of wind. To massively simplify the mathematics involved in calculating wind effects, it was decided that the best approach was to normalise all other parameters to allow the wind vector to always act along the x axis. This works because using our 3 parameters for each end of the path, we can still describe any possible configuration when limiting the wind to act in only one direction. As such, the wind vector is simply a positive or negative value, which is used to define the wind speed and direction. A negative value for the wind vector indicates wind blowing in the negative direction along the x axis, and vice versa for a positive value. Using this, we can enter the following very simple loop to calculate the effects of wind:
 
-% \begin{frame}
+
 \begin{center}
 \begin{minipage}{\linewidth}
 \begin{algorithm}[H]
@@ -202,18 +199,18 @@ At this point we now know the time difference between each reading and are ready
 \end{algorithm}
 \end{minipage}
 \end{center}
-% \end{frame}
 
-This algorithm works by adding two additional rows to the output matrix from the Dubins Mex program, the first of which we populate with the time value corresponding to the data points in that column, and the second we populate with the new x values for the ground relative path. As mentioned, we do not need to calculate the y values for the ground relative path, as the wind is blowing in the x direction. Because of this we can simply calculate the offset in the x direction as a result of wind by multipling the time the UAV has been flying for with the wind vector, and adding this to the x location of the air relative path. Following this we simply plot both paths on the same graph, adding a legend and an arrow to show the wind vector, and we have Fig. \ref{fig:pp2demo}
+
+This algorithm works by adding two additional rows to the output matrix from the Dubins Mex program, the first of which we populate with the time value corresponding to the data points in that column, and the second we populate with the new x values for the ground relative path. As mentioned, we do not need to calculate the y values for the ground relative path, as the wind is blowing in the x direction. Because of this we can simply calculate the offset in the x direction as a result of wind by multiplying the time the UAV has been flying for with the wind vector, and adding this to the x location of the air relative path. Following this we simply plot both paths on the same graph, adding a legend and an arrow to show the wind vector, and we have Fig. \ref{fig:pp2demo}
 
 \begin{figure}[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{PP2_Demo}
-\caption[stage 2: Plotting the Effects of Wind on Dubins Paths in MATLAB]{The plot results of stage 2 in MATLAB, showing the ground relative path corresponding to an air relative Dubins path}
+\caption[Plotting the effects of wind on Dubins paths in MATLAB]{The plot results of stage 2 in MATLAB, showing the ground relative path corresponding to an air relative Dubins path}
 \label{fig:pp2demo}
 \end{figure}
 
-The inputs for the results seen in \ref{fig:pp2demo} are exactly the same as for the test carried out in Section \ref{task1:implementation:stage1}, with the addition of a wind vector value and a UAV airspeed value. The airspeed chosen for the UAV was 18 metres per second, as this was the cruising speed of the UAV used by Dr Andrew Pomfret on his expedition to Svalbard. A windspeed of 10 metres per second was used, blowing in the negative x direction.
+The inputs for the results seen in \ref{fig:pp2demo} are exactly the same as for the test carried out in Section \ref{task1:stage1:implementation}, with the addition of a wind vector value and a UAV airspeed value. The airspeed chosen for the UAV was 18 metres per second, as this was the cruising speed of the UAV used by Dr Andrew Pomfret on his expedition to Svalbard. A wind-speed of 10 metres per second was used, blowing in the negative x direction.
 
 \subsection{Stage 2: Testing}
 \label{task1:stage2:testing}
@@ -229,7 +226,7 @@ As we had specified throughout that the wind vector was always pointing along th
 	\item The actual offset in the x axis, calculated as the distance between the end points of the two path types
 \end{itemize}
 
-By printing out this information and running a number of tests, it was easy to quickly check that we were infact calculating a correct offset due to wind, all within the MATLAB console. 
+By printing out this information and running a number of tests, it was easy to quickly check that we were in fact calculating a correct offset due to wind, all within the MATLAB console. 
 
 %******************************************************************************************************
 %******************************************************************************************************
@@ -246,16 +243,16 @@ This will use a similar plot style to that produced in stage 2, allowing us to c
 
 This system will be heavily based on the research discussed in Section \ref{litrev:path}, implementing the search algorithm as mentioned.
 
-\subsection{Stage 3:Implementation}
+\subsection{Stage 3: Implementation}
 \label{task1:stage3:implementation}
 
-For this iteration of our path planning system, we need to implement our search algorithm to find a suitable air relative path to lead our UAV to the correct groud relative position. In this section we introduce the use of a virtual target, $vt$. The input parameters for this system are the same as in stage 2. 
+For this iteration of our path planning system, we need to implement our search algorithm to find a suitable air relative path to lead our UAV to the correct ground relative position. In this section we introduce the use of a virtual target, $vt$. The input parameters for this system are the same as in stage 2. 
 
-In stage 2, we simply defined a Dubins path between $q_0$ and $q_1$ and then calculated the effect of wind on the resultant path. In this solution, we define an air relative dubins path between $q_0$ and $vt$, that when coupled with the effect of wind, will produce a ground relative path between $q_0$ and $d$. This will allow us to specify the end point of our first imaging path, $q_0$, and the start point of the next imaging path, $d$. 
+In stage 2, we simply defined a Dubins path between $q_0$ and $q_1$ and then calculated the effect of wind on the resultant path. In this solution, we define an air relative Dubins path between $q_0$ and $vt$, that when coupled with the effect of wind, will produce a ground relative path between $q_0$ and $d$. This will allow us to specify the end point of our first imaging path, $q_0$, and the start point of the next imaging path, $d$. 
 
 This search algorithm works using a series of time values which we compare to assess the suitability of a proposed solution. The algorithm starts at time 0, and at this point the UAV is at $q_0$ ready to begin its path, and $vt$ is equal to $d$. $vt$ is an air relative position, so as soon as the timer starts counting, its position changes following a vector equal and opposite to the wind vector. 
 
-Our search algorithm solution is claculated based off two time measurements, $Ta$ and $Tvt$. $Ta$ is the time taken for the UAV to travel from $q_0$ to $vt$ by flying a Dubins path, so can be calculated using:
+Our search algorithm solution is calculated based off two time measurements, $Ta$ and $Tvt$. $Ta$ is the time taken for the UAV to travel from $q_0$ to $vt$ by flying a Dubins path, so can be calculated using:
 
 \begin{equation}
 	Ta = \frac{(n*stepSize)}{uavSpeed}
@@ -334,12 +331,12 @@ Other than this, as before, a number of scenarios were tested and visually inspe
 
 The final step for completing the path planning part of this project is to create the console application. This console application will serve three main purposes; firstly it will form an integral part of path length calculation in the other project relating to this work, mentioned in Section \ref{intro}. Secondly it will enable us to do some fast and thorough testing of our path generation search algorithm, as will be discussed later. Finally, it will be used in the testing stages of the second task in this project, the path following task.
 
-\subsection{Stage 4:Implementation}
+\subsection{Stage 4: Implementation}
 \label{task1:stage4:implementation}
 
 The last work to complete for this task was to create a standalone console application version of the code in stage 3. This did not need to generate any plots, but must return the lengths of each segment of the chosen Dubins path. 
 
-To simplify the development process, instead of converting the code from the Dubins Mex application, we used the original source code available at \cite{WalkerDubinsCurves}. Because the purpose of a Mex wrapper is to provide compatability with MATLAB, the input and output handling is designed to work using MATLAB data structures and functionality. The original source code is a pure C application, which was more straightforward to convert to a console application. The resulting application was written in C\texttt{++} so as to simplify the handling of strings, as we needed to be able to display to the user the path type (e.g. LSL, RSL), and using C would make this more complicated. 
+To simplify the development process, instead of converting the code from the Dubins Mex application, we used the original source code available at \cite{WalkerDubinsCurves}. Because the purpose of a Mex wrapper is to provide compatibility with MATLAB, the input and output handling is designed to work using MATLAB data structures and functionality. The original source code is a pure C application, which was more straightforward to convert to a console application. The resulting application was written in C\texttt{++} so as to simplify the handling of strings, as we needed to be able to display to the user the path type (e.g. LSL, RSL), and using C would make this more complicated. 
 
 The research documented in \cite{mcgee2005optimal} draws two major conclusions;
 
@@ -348,11 +345,9 @@ The research documented in \cite{mcgee2005optimal} draws two major conclusions;
 	\item For the remaining cases, the path that must be flown will be a non-optimal path, meaning the path must be lengthened 
 \end{enumerate}
 
-Due to conclusion one, \textit{dubins.cpp} was modified from the source code available on GitHub to instead return an array of Dubins paths, populated with all 6 path types. This would ensure that we could check to see if any of the paths for the chosen $vt$ position satisfied our equation. The initial intention was to stay true to the referenced research, attempting to find paths that satisfied $Tvt = Ta$. In the first version of this application, we did not supply any method for handling scenarios described by conclusion two in purpose. The intention was to perform a series of tests to determine how frequently we would need to fly non-optimal paths, and adjust our path calculations accordingly. This testing will be discussed in \ref{task1:testing:stage4}. The findings, however, suggested that by allowing a difference of up to 0.1 seconds, that we could solve the algorithm for all scenarios tested using the regular Dubins paths. 
+Due to conclusion one, \textit{dubins.cpp} was modified from the source code available on GitHub to instead return an array of Dubins paths, populated with all 6 path types. This would ensure that we could check to see if any of the paths for the chosen $vt$ position satisfied our equation. The initial intention was to stay true to the referenced research, attempting to find paths that satisfied $Tvt = Ta$. In the first version of this application, we did not supply any method for handling scenarios described by conclusion two in purpose. The intention was to perform a series of tests to determine how frequently we would need to fly non-optimal paths, and adjust our path calculations accordingly. This testing will be discussed in \ref{task1:stage4:testing}. The findings, however, suggested that by allowing a difference of up to 0.1 seconds, that we could solve the algorithm for all scenarios tested using the regular Dubins paths. 
 
-This 0.1 second tolerance introduces an error into system, resulting in the UAV not quite aligning with $d$ in certain situations. However, if using a relatively fast UAV that has an airspeed of 30 metres per second flying a path that has the maximum error value, you will only miss the mark by 3 metres. When we consider that most aerial photography will be conducted at more than 20 metres above ground, this level of error is not very large. By allowing this small margin of error, we simplified both the path planning and path following sections of this project, so it was considered worth sacrificing a little performance for simplicity and processing speed.
-
-%TODO go back and explain how this was included into PP2/PP3
+This 0.1 second tolerance introduces an error into system, resulting in the UAV not quite aligning with $d$ in certain situations. However, if using a relatively fast UAV that has an airspeed of 30 metres per second flying a path that has the maximum error value, you will only miss the mark by 3 metres. When we consider that most aerial photography will be conducted at more than 20 metres above ground, this level of error is not very large. By allowing this small margin of error, we simplified both the path planning and path following sections of this project, so it was considered worth sacrificing a little performance for simplicity and processing speed. This change was then added into the previously completed work.
 
 The original Dubins path code can be found in \textit{dubins.cpp} which has been modified by the author to fit our purposes. There were a number of functions that were copied and altered to return all 6 path types, using the \textit{DubinsPath} structure found in \textit{dubins.h}. 
 
@@ -361,11 +356,11 @@ The finalised search algorithm is very similar to that developed in stage 3, con
 \begin{figure}%[htbp!] 
 \centering    
 \includegraphics[width=\textwidth]{Console_Demo}
-\caption[Screenshot of the finalised console application]{A screenshot of the console application, as seen by the user}
+\caption[Screenshot of the finalised console application]{A screen shot of the console application, as seen by the user}
 \label{fig:consoledemo}
 \end{figure}
 
-At a later stage in this project, another version of this console application was developed to take the orientation inputs in degrees rather than radians, and to display flight times for each segment as milliseconds rather than seconds. This was done mainly for the authors convenience, and was used to speed up the testing cycle of the path following section of this work. A screenshot of this modified console can be seen in Appendix \ref{app:consoledegrees}.
+At a later stage in this project, another version of this console application was developed to take the orientation inputs in degrees rather than radians, and to display flight times for each segment as milliseconds rather than seconds. This was done mainly for the authors convenience, and was used to speed up the testing cycle of the path following section of this work. A screen shot of this modified console can be seen in Appendix \ref{app:consoledegrees}.
 
 \subsection{Stage 4: Testing}
 \label{task1:stage4:testing}
@@ -428,14 +423,22 @@ Total: 		10.2978
 \end{lstlisting}
 \end{minipage}
 
-Where ``Start'' is the $q_0$ location, ``End'' is the $d$ location, and ``Wspd'' is the windspeed vector value, with its sign denoting direction in the x axis. The path type is printed out and then the $t$, $p$, and $q$ segment lengths are printed too. 
+Where ``Start'' is the $q_0$ location, ``End'' is the $d$ location, and ``Wspd'' is the wind speed vector value, with its sign denoting direction in the x axis. The path type is printed out and then the $t$, $p$, and $q$ segment lengths are printed too. 
 
-This set of tests covers 59584 unique testing scenarios including 3136 no-wind scenarios, 28224 positive wind vectors, and 28224 negative wind vectors. As can be seen in the source file \textit{calculatePaths.cpp}, the search algorithm has a built-in timeout feature, where if the turn would take longer than 30 seconds to complete, we print an error to the text file suggesting no suitable path has been found. By introducing the 0.1 second error allowance in the comparison between $Tvt$ and $Ta$ we were able to test all 59584 scenarios without a single instance of a suitable path not being found. This finding allowed us to go back to stage 3 of this work and introduce this allowance here too, so as to ensure continuity throughout the work. 
+This set of tests covers 59584 unique testing scenarios including 3136 no-wind scenarios, 28224 positive wind vectors, and 28224 negative wind vectors. As can be seen in the source file \textit{calculatePaths.cpp}, the search algorithm has a built-in time-out feature, where if the turn would take longer than 30 seconds to complete, we print an error to the text file suggesting no suitable path has been found. By introducing the 0.1 second error allowance in the comparison between $Tvt$ and $Ta$ we were able to test all 59584 scenarios without a single instance of a suitable path not being found. This finding allowed us to go back to stage 3 of this work and introduce this allowance here too, so as to ensure continuity throughout the work. 
+
+Purely out of curiosity, the results of this console testing were processed to produce a series of tables which can be seen in Appendix \ref{app:RollResults}. These show the number of times each type of path was shown to be the solution across all of these tests, followed by similar results for reduced sets of the data categorised by the wind condition. These results are unimportant to the project but were included regardless.
 
 The final stage of testing for this task was to compare results produced by our MATLAB solution with those of the console application. By manually entering the same input parameters into both, we were able to run a series of checks to guarantee this. The first check is to ensure that the plotted path is of the same type described in the console window (e.g. LRL). Following this, we also edited the MATLAB file to print out the length of path, which we could then compare to the total provided by the console application. Allowing for very small margins of error due to rounding differences between MATLAB and C\texttt{++}, all scenarios checked presented the same results. With all of this complete, we were confident in our findings, and ready to progress to the next task in the project.
 
 %******************************************************************************************************
 %******************************************************************************************************
-\section{Path Planning - Summary and Conclusions}
+\section{Path Planning Summary}
 \label{task1:summary}
-%TODO duhhh
+When compared with the planned features discussed at the beginning of this chapter, the resultant MATLAB and console applications meet the requirements perfectly. By using both MATLAB and C\texttt{++}, we have been able to display the Dubins path solutions both graphically and numerically. This has allowed for visual inspection and comparison of the results, further improving confidence in the results. 
+
+One glaring problem however, is the fact that no fixed-wing UAV will ever be able to truly fly a Dubins path, as a result of needing time to roll and as such change turning direction. This was realised early on, however was not accounted for in this work. This will be further discussed in later chapters.
+
+This chapter has detailed the design, testing, and implementation for the entire path planning solution, covering all major steps in development. We have treated each stage as a form of iteration when talking about planning and management, shown by the testing that has occurred after each new feature has been delivered.
+
+The source code generated for this task can be seen in \path{SourceCode/MATLAB} and \path{SourceCode/ConsoleApplications} of the submission folder, please read the \textit{README.txt} file for further information.

@@ -22,15 +22,15 @@
 % **************************** Define Graphics Path **************************
 \graphicspath{{Chapter5/Figs/}}
 
-This work has served as a proof of concept upon which future developers would be able to build to vastly improve the behaviours of the stock ArduPlane autopilot. Although this work has not provided a complete solution to the problem, it has provided a basis from which a more complete and robust solution could be implemented. This project has opened up a number of avenues for improvement and extension, and this chapter shall be suggesting and discussing a few of them.  All of the proposals in this section would make suitable candidates for the next body of work to be completed, partly as none of them rely on any other proposal to be beneficial to the overall project. 
+This work has served as a proof of concept upon which future developers would be able to build to vastly improve the behaviours of the stock ArduPlane autopilot. Sadly the concept being tested proved to be unsuitable, by a much larger degree than expected. Regardless, the lessons learnt here can be used to re-design the path planning aspect of this project, potentially resulting in a very useful implementation of the ideas at hand. This project has opened up a number of avenues for improvement and extension, and this chapter shall be suggesting and discussing a few of them.   
 
 The proposals that shall be discussed are
 
 \begin{enumerate}
-	\item Incorporation of path planning solution into mission planning software
 	\item Improving tolerances in path planning solution
+	\item Incorporation of path planning solution into mission planning software
 	\item Alternate techniques for commanding UAV navigation along Dubins paths
-	\item Planning Paths Onboard the UAV
+	\item Planning paths on-board the UAV
 	\item Improving the handling of wind gusts
 	\item Extending Dubins path turning to work in 3D space
 \end{enumerate}
@@ -38,49 +38,51 @@ The proposals that shall be discussed are
 
 %******************************************************************************************************
 %******************************************************************************************************
-\section{Proposal 1: Incorporation Into Mission Planning Software}
+\section{Proposal 1: Improving Tolerances at the Planning Stage} 
+\label{future:tolerance}
+This proposal aims to improve performance of the system as a whole by enabling paths to be planned which are more realistic for a UAV to be able to fly.
+
+\subsection{Proposal 1: Justification} 
+\label{future:proposal1:justification}
+ As has been identified throughout this project, the one major cause of the failures seen was the path planning. The path following modification made to ArduPlane behaved exactly as they should have been expected to, however the path planning did not accurately take this into account. The path planning solution was designed without full knowledge of the behaviours of ArduPlane and the JSBSim flight simulator, which led to the issues we have seen. 
+
+With an improved path planning solution, this project as a whole could have been a resounding success, as such should be the absolute first priority when considering future work to be undertaken.
+
+\subsection{Proposal 1: Plan} 
+\label{future:proposal1:plan}
+
+A more successful version of the path planning system could take a number of forms, but any of these would need to take into account the true behaviour of the aircraft, hence ``improving tolerances''. Firstly, one possible area of interest could be to start by calculating a Dubins path as before, then modifying it in such a way as to lengthen the transitions between turn segments. This would relax the requirement on the UAV to roll too fast, meaning it would be possible to fly the planned route.
+
+A second suggestion could be to scrap the idea of Dubins paths entirely, instead focussing on a combination of throttle control and turning to better align the UAV with the imaging path. By slowing the UAV down, it is possible to turn much tighter, which could result in simpler navigation. 
+
+Any solution implemented would need to balance the performance of the system with the battery and time requirements.
+
+\subsection{Proposal 1: Summary}
+\label{future:proposal1:summary}
+Improving the path planning would be the first thing to be done should someone wish to carry on this work. The products created as part of this project show promise in theory, but in practice are just not compatible with one another. There are a wide range of options which could be explored for this work, but the first thing to do would be to carry out further testing on ArduPlane so as to get a thoroughly detailed idea of just how the autopilot will respond to a range of stimuli and command inputs.
+
+%******************************************************************************************************
+%******************************************************************************************************
+\section{Proposal 2: Incorporation Into Mission Planning Software}
 \label{future:missionplanner}
 This proposal could be completed at any time, either now or once a more complete solution is developed, but mainly focuses on usability as opposed to functionality. 
 
-\subsection{Proposal 1: Justification} 
-\label{future:missionplannerreason}
-In order to make the planning process simpler for the user, incorporating the path planning application into the mission planning software is a must. Both MissionPlanner and APM Planner 2, as discussed in Section \ref{intro:planner}, are open source applications. This means it would be quite straight forward to incorporate our path planning software into each program, but would require work on both codebases. By integrating our work into the mission planning software, we would be able to specify new types of waypoint to signify the start and end points of each imaging path, and the planning software could calculate the desired Dubins path between the two, when provided with a wind input. This would also enable us to automatically generate the turn commands issued to the UAV in the mission plan, meaning no user intervention would be required to edit them. 
+\subsection{Proposal 2: Justification} 
+\label{future:proposal2:justification}
+In order to make the planning process simpler for the user, incorporating the path planning application into the mission planning software is a must. Both MissionPlanner and APM Planner 2, as discussed in Section \ref{intro:planner}, are open source applications. This means it would be quite straight forward to incorporate our path planning software into each program, but would require work on both code bases. By integrating our work into the mission planning software, we would be able to specify new types of waypoint to signify the start and end points of each imaging path, and the planning software could calculate the desired Dubins path between the two, when provided with a wind input. This would also enable us to automatically generate the turn commands issued to the UAV in the mission plan, meaning no user intervention would be required to edit them. 
 
-\subsection{Proposal 1: Plan} 
-\label{future:missionplannerplan}
-The first step would be to download and analyse the operation of the two path planning applications. Following this it would be necessary to either re-write our planning application, or simply call it from within the planning software to return the results. This should be straightforward, however as the author has not been working with either of these codebases, suggesting a time estimate for this work would not be wise. 
+
+\subsection{Proposal 2: Plan} 
+\label{future:proposal2:plan}
+The first step would be to download and analyse the operation of the two path planning applications. Following this it would be necessary to either re-write our planning application, or simply call it from within the planning software to return the results. This should be straightforward, however as the author has not been working with either of these code bases, suggesting a time estimate for this work would not be wise. 
 
 After implementing the changes, we could issue a pull request for the repositories on GitHub and our changes may be included into the officially released versions.
 
-\subsection{Proposal 1: Summary}
-\label{future:missionplannersummary}
+\subsection{Proposal 2: Summary}
+\label{future:proposal2:summary}
 This change would be both straightforward to implement and hugely beneficial to the average user. It would massively simplify adding our new turn techniques into a mission and remove the need for tinkering and editing of mission plans.
 
 As this project has been essentially a proof of concept and was never intended to be incorporated into official ArduPilot products, it has not been necessary to do this as part of the project. If it were included as part of this project, it would have been very useful for speeding up the testing process, as currently it is necessary to edit the mission plans manually. 
-
-%******************************************************************************************************
-%******************************************************************************************************
-\section{Proposal 2: Improving Tolerances at the Planning Stage} 
-\label{future:tolerance}
-This proposal aims to improve performance of the system as a whole, enabling the UAV to recover from unfavourable wind conditions.
-
-\subsection{Proposal 2: Justification}
-\label{future:tolerancereason}
-Whilst the UAV is performing one of our newly implemented turns, it could be unexpectedly blown off course by a gust of wind. In its current form, the new turning system banks the UAV at its maximum permitted bank angle to completed left and right turning segments. If we imagine the UAV performing a right hand turn segment, and being blown off its course to the left; it is unable to command a greater bank angle and as such will never return to the original turning path. If we are aware of the wind speed and the likelihood of gusts at the planning stage, we can instead plan a route using a more shallow bank angle to give us some leeway in the bank commands. This means that should we be blown off course, we can command more of a bank to enable us to return to the original intended path, followed by reducing the bank angle to its original value. 
-
-Adding this tolerance in at the planning stage would ensure improved performance in gusty conditions, and would reduce the risk of missing the start point of our imaging paths with the correct orientation.  
-
-\subsection{Proposal 2: Plan} 
-\label{future:toleranceplan}
-The new planning algorithm would need to take into account wind gusts, but in their very nature these are hard to predict. One solution to this would be to plan all routes with very conservative turning radius, requiring smaller bank and roll angles. Another alternative would be to base our bank and roll angles off the magnitude of a wind average; if the average wind speed over a period of time during the planning stage is low (such as 5 metres per second) we can safely use greater roll and bank angles, and as such reduce our turning radius. 
-
-Neither of these proposed solutions are particularly pre-emptive of the behaviour of the wind, but would both enable us to accurately track a turning path regardless of gusts. A final solution would be to use a weather mapping service for the area which provides a range of wind speeds we can expect. There are a number of online meterological services that can provide an average wind speed with a predicted speed that gusts may reach. Using the ratio of expected gusts to current wind speed (with allowances either side for inaccurate readings) we can derive a suitable roll and bank limit for our flight.
-
-Once we have calculated the suitable roll angle values, they could be passed in with the MAVLink commands to be set during the flight. The current implementation simply uses the UAV's maximum roll angle, instead we would pass another value in one of the spare parameter fields to set a specific roll angle. We would also need to implement a system to detect gusts and correct tracking after the fact, for this we would also need to implement Proposal 5 in Section \ref{future:gusts}. Other than this very little would need to be changed, as we would be able to calculate our minimum turning radius from our desired speed and roll angles, and then use the rest of the system as is. 
-
-\subsection{Proposal 2: Summary} 
-\label{future:tolerancesummary}
-This proposal would provide a much greater level of reliability to our system to help ensure that environmental factors don't cause the UAV to miss the start of imaging paths. The most difficult aspect would be gathering accurate information about the behaviour of the wind, a very difficult set of variables to record. The most straightforward option would be to simply use very conservative roll limits combined with the features of Proposal 5. This would still improve reliability but we would not be making the absolute most of our battery life by maximimising performance. Like many things with this kind of work, it is a compromise between performance and reliability that needs to be considered, alongside determining how this sort of solution would work for a large range of UAVs with very different flight characteristics. 
 
 %******************************************************************************************************
 %******************************************************************************************************
@@ -126,7 +128,7 @@ We would also need to ensure that any paths generated from a moving waypoint wou
 
 %******************************************************************************************************
 %******************************************************************************************************
-\section{Proposal 4: Planning Paths Onboard the UAV} 
+\section{Proposal 4: Planning Paths On-board the UAV} 
 \label{future:onboard}
 
 Currently our system plans our new turns entirely on the ground. If we are able to calculate our paths on the UAV, it would allow us to better handle disturbances by wind.
@@ -134,16 +136,16 @@ Currently our system plans our new turns entirely on the ground. If we are able 
 \subsection{Proposal 4: Justification}
 \label{future:onboardreason}
 
-When we plan our paths we need to know the orientation of the UAV when starting the turn, as well as when we finish it. If we imagine a scenario in which we are reaching the end point of an imaging path and we need to start our turn, it is possible that a gust of wind has blown us off course or altered our orientation. By calculating the path when we are about to reach the start point of the turn, we can instead use accurate values for our orienation and as such plan a more suitable path. 
+When we plan our paths we need to know the orientation of the UAV when starting the turn, as well as when we finish it. If we imagine a scenario in which we are reaching the end point of an imaging path and we need to start our turn, it is possible that a gust of wind has blown us off course or altered our orientation. By calculating the path when we are about to reach the start point of the turn, we can instead use accurate values for our orientation and as such plan a more suitable path. 
 
 Further to this, if the wind speed increases or changes direction, we would be able to plan a new route to handle these changes, resulting in better alignment with the imaging path and providing higher quality aerial photographs. 
 
 \subsection{Proposal 4: Plan} 
 \label{future:onboardplan}
 
-Our first consideration for this work would be whether the hardware currently available would be suitable. As discussed in Chapter 1, the APM boards do not have the storage capacity for even the latest stock versions of ArduPlane, so would definitely not be able to accommodate an additional feature such as this. The Pixhawk board may be able to, but this would need to be investigated beforehand. Another consideration is processing power; the current algorithm is a form of search algorithm, and depending on the input parameters may take a little while. The processors on both the Pixhawk and the APM are not massively powerful, so processing time would need to be a consideration. 
+Our first consideration for this work would be whether the hardware currently available would be suitable. As discussed in Chapter \ref{intro}, the APM boards do not have the storage capacity for even the latest stock versions of ArduPlane, so would definitely not be able to accommodate an additional feature such as this. The Pixhawk board may be able to, but this would need to be investigated beforehand. Another consideration is processing power; the current algorithm is a form of search algorithm, and depending on the input parameters may take a little while. The processors on both the Pixhawk and the APM are not massively powerful, so processing time would need to be a consideration. 
 
-One solution to this would be to introduce some dedicated hardwre to handle the task. We could add an additional processor that could be connected up to the controller board and sensors which would then be solely responsible for calculating Dubins paths for the autopilot to use. Although this would introduce additional costs and weight to be carried, it would ensure that calculating these paths would not slow down the navigation systems or hog the processing power of the controller board.
+One solution to this would be to introduce some dedicated hardware to handle the task. We could add an additional processor that could be connected up to the controller board and sensors which would then be solely responsible for calculating Dubins paths for the autopilot to use. Although this would introduce additional costs and weight to be carried, it would ensure that calculating these paths would not slow down the navigation systems or hog the processing power of the controller board.
 
 With regards to the software itself, if we were to provide additional hardware, the only thing we would need to do would be to port it to the new device and configure it to take its inputs from the autopilot. If we were integrating it to ArduPlane, the process would be even easier, simply passing variables from within the autopilot system itself without the need to enable communication protocols or sensor connections. 
 
@@ -159,7 +161,7 @@ This is another proposal that could generate real performance improvements, and 
 \section{Proposal 5: Improving Handling of Gusts of Wind} 
 \label{future:gusts}
 
-As briefly touched upon in Proposal 2 (section \ref{future:tolerance}), this proposal aims at improving the systems ability to correct for perturbations due to gusts of wind. Again this is an improvement to performance, in particular to improve system reliability. 
+As briefly touched upon in Proposal 1, this proposal aims at improving the systems ability to correct for perturbations due to gusts of wind. Again this is an improvement to performance, in particular to improve system reliability. 
 
 \subsection{Proposal 5: Justification}
 \label{future:gustsreason}
@@ -198,7 +200,6 @@ In its current form, our system enables improved turning for aligning with imagi
 \label{future:3dplan}
 
 Research documented in \cite{beard2013implementing}, \cite{hota2010optimal}, and \cite{lin2014path} show that this proposal is not only possible, it is effective too. Using the current navigation system available in ArduPlane, it would not be too much extra work to include our third axis of movement, whereby controlling for pitch changes could be carried out at the same time we alter roll and yaw. As with the current system, we would need to include allowances for disturbances and error due to wind and gusts, but in essence the navigation system would be relatively unchanged. The current waypoint navigation system accounts for changes in altitude, so if it was extended as proposed in Proposal 5, it would also be able to correct errors in $z$ axis. 
-%TODO polish off this section
 
 \subsection{Proposal 6: Summary} 
 \label{future:3dsummary}
@@ -207,3 +208,7 @@ As with all of the proposals so far, this of course an element of uncertainty in
 
 %******************************************************************************************************
 %******************************************************************************************************
+\section{Future Work Summary}
+\label{future:summary}
+
+In this chapter we have identified a few of the many improvements that could be made; some are simple extensions of the work completed, whilst others are more re-workings of current solutions. The proposals described here offer a mix of performance improvements, user-friendliness, and suggestions for future research. The author genuinely hopes this work is continued, and feels it is a shame that this chapter needed to be so thorough.

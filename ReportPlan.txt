@@ -89,7 +89,7 @@ Add all MATLAB graphs to appendix ///
 Testing screenshots in Appendix ///
 Link appendix names ///
 Mention where source code can be found
-Write readme for source code
+Write readme for source code ///
 Talk about trade-off between path length and accuracy in current system
 
 

@@ -70,7 +70,7 @@ This project will primarily focus on the mapping of land beneath the UAV, and as
 \label{fig:simplespiral}
 \end{figure}
 
-Using these patterns, it is possible to define what shall be referred to henceforth as ``imaging paths'' or ``imaging runs''. These are sections of the flight path along which images of the ground below are being captured. Accordinly, whilst travelling these imaging paths, the position and orientation of the UAV are of the utmost importance. For the lawnmower pattern the imaging paths are the vertical sections of the path seen in Fig. \ref{fig:simplelawnmower}, whereas for the spiral path all sections of the flight plan are considered imaging paths. 
+Using these patterns, it is possible to define what shall be referred to henceforth as ``imaging paths'' or ``imaging runs''. These are sections of the flight path along which images of the ground below are being captured. Accordingly, whilst travelling these imaging paths, the position and orientation of the UAV are of the utmost importance. For the lawnmower pattern the imaging paths are the vertical sections of the path seen in Fig. \ref{fig:simplelawnmower}, whereas for the spiral path all sections of the flight plan are considered imaging paths. 
 
 As the lawnmower pattern does not require the horizontal sections of the path in Fig. \ref{fig:simplelawnmower} to be used for capturing images, the precise route flown between the vertical paths is unimportant. Knowing this, the flightpath can be simply specified in terms of just the imaging paths, as can be seen in Fig. \ref{fig:imaginglawnmower}.
 
@@ -96,7 +96,7 @@ The required flightpath will have to be calculated based on a number of factors 
 
 These factors shall be considered and discussed later in this report where relevant, and have been used to inform decisions throughout the work of this project.
 
-Throughout this worl, the term ``mission'' will be used interchangeably with ``flightpath'', and describes a full, pre-planned flight path from take-off to landing. To define these missions we require particular software products that shall be discussed in Section \ref{intro:planner}.
+Throughout this work, the term ``mission'' will be used interchangeably with ``flightpath'', and describes a full, pre-planned flight path from take-off to landing. To define these missions we require particular software products that shall be discussed in Section \ref{intro:planner}.
 
 %TODO mission planning process?
 %******************************************************************************************************
@@ -104,9 +104,9 @@ Throughout this worl, the term ``mission'' will be used interchangeably with ``f
 \section{ArduPilot} 
 \label{intro:ardupilot}
 
-ArduPilot, also known as ArduPilotMega (APM), is an open-source suite of autopilot products aimed at hobbyists and professionals alike. ArduPilot includes the ArduPlane, ArduCopter, and ArduRover autopilots, each aimed at aeroplane style UAVS, helicopter and multirotor UAVS, and ground based rover platforms respectively. As previously mentioned, this project is aimed at fixed-wing aeroplane UAVs, and as such this report is concerned with the ArduPlane product. 
+ArduPilot, also known as ArduPilotMega (APM), is an open-source suite of autopilot products aimed at hobbyists and professionals alike. ArduPilot includes the ArduPlane, ArduCopter, and ArduRover autopilots, each aimed at aeroplane style UAVS, helicopter and multi-rotor UAVS, and ground based rover platforms respectively. As previously mentioned, this project is aimed at fixed-wing aeroplane UAVs, and as such this report is concerned with the ArduPlane product. 
 
-ArduPilot has been around since late 2009 and was originally designed to operate using the Arduino development ecosystem. Since then, the codebases have evolved in both size and functionality, in part due to hardware improvements which will be discussed in Section \ref{intro:planner}. This has lead to both the software and hardware components of these ArduPilot autopilot solutions moving away from Arduino almost entirely.
+ArduPilot has been around since late 2009 and was originally designed to operate using the Arduino development ecosystem. Since then, the code bases have evolved in both size and functionality, in part due to hardware improvements which will be discussed in Section \ref{intro:planner}. This has lead to both the software and hardware components of these ArduPilot autopilot solutions moving away from Arduino almost entirely.
 
 ArduPilot grew out of an organisation called DIYDrones, which was set up as an online community for enthusiasts to discuss and create solutions for UAV use; this community still exists and operates as one of the many hubs for discussion regarding UAVs, autopilots, and route planning. In 2014, the group of people maintaining the ArduPilot project teamed up with The Linux Foundation to create a non-profit organisation called the Dronecode Project \cite{Dronecode}. The Dronecode Project is an effort to collaborate a number of open-source hardware and software products under one structure, which includes the ArduPilot project. In February 2016, it was announced that the core team behind ArduPilot would be creating their own non-profit organisation to best suit the needs of the users of the ArduPilot products, however at the time of writing this is still a work in progress \cite{ArduNonProfit}.
 
@@ -115,7 +115,7 @@ ArduPilot grew out of an organisation called DIYDrones, which was set up as an o
 
 ArduPlane is designed so that when paired with a suitable controller board, it enables autonomous flight on almost any fixed-wing UAV \cite{ArduPlaneHome}. To do this, the ArduPlane software is compiled to create the firmware, which is then programmed onto the controller board alongside the mission plan. Once the controller board is connected to all of the necessary control outputs and sensor inputs, the UAV must be configured and tuned for flight, and is then ready for take-off. The configuration and tuning are of course capabilities provided by ArduPlane, however are not relevant for discussion within the context of this project. ArduPlane handles both automatic take-off and landings, as well as providing the option to change between a number of flight modes. The flight modes available include fly-by-wire modes, an acrobatics mode, a training mode, and an automatic flight mode.
 
-The ArduPlane codebase uses a very large collection of libraries, of which the majority are also used by the ArduCopter and ArduRover products. This, combined with the fact that ArduPlane is designed to work with any fixed-wind UAV means that a lot of the code is very generic and reusable. The codebase for the whole ArduPilot project currently consists of roughly 11,000 files in total (when including submodules), and the specific ArduPlane code (excluding any shared libraries or resources) is made up of only 37 files. The sheer number of shared files, generic coding style, and open-source nature of this project combine to mean that in many respects the code commenting and documentation is very lacking and unspecific. That being said, there are a number of instructional guides and references that can be found on the ArduPilot website for anyone looking to modify the code or get involved with contribution. In addition to this, there are a number of forums that can provide many answers to common problems. 
+The ArduPlane code base uses a very large collection of libraries, of which the majority are also used by the ArduCopter and ArduRover products. This, combined with the fact that ArduPlane is designed to work with any fixed-wind UAV means that a lot of the code is very generic and reusable. The code base for the whole ArduPilot project currently consists of roughly 11,000 files in total (when including submodules), and the specific ArduPlane code (excluding any shared libraries or resources) is made up of only 37 files. The sheer number of shared files, generic coding style, and open-source nature of this project combine to mean that in many respects the code commenting and documentation is very lacking and unspecific. That being said, there are a number of instructional guides and references that can be found on the ArduPilot website for anyone looking to modify the code or get involved with contribution. In addition to this, there are a number of forums that can provide many answers to common problems. 
 
 As well as there being three main autopilot products, there are also a large number of differing released versions and code branches of each of these products, which are often platform specific or hardware specific. The result of this is that there are a huge number of versions of the software, often with only slight differences between them.
 
@@ -125,7 +125,7 @@ As well as there being three main autopilot products, there are also a large num
 
 As the ArduPilot project is open source, there are a number of associated open-source utilities available to download for testing purposes. One of the main tools used in ArduPlane development is called JSBSim, an open-source Flight Dynamics Model (FDM) which can be used as part of a flight simulator \cite{jsbsim}. 
 
-It is possible to create a Software In The Loop (SITL) simulator using JSBSim, enabling the simulation of UAV flights using ArduPlane without any requirement for additional hardrware. This enables a wide range of test to be performed on any changes to ArduPlane without the need to have an actual UAV or a controller board. Fig. \ref{fig:jsbsim} shows the SITL simulator as a whole, where we have the command window, an output console, and a map view. The map view shows the planned mission and the actual path the UAV will follow in the given scenario, the console window displays output and communication messages from the UAV, and the command window allows control of the simulator.
+It is possible to create a Software In The Loop (SITL) simulator using JSBSim, enabling the simulation of UAV flights using ArduPlane without any requirement for additional hardware. This enables a wide range of test to be performed on any changes to ArduPlane without the need to have an actual UAV or a controller board. Fig. \ref{fig:jsbsim} shows the SITL simulator as a whole, where we have the command window, an output console, and a map view. The map view shows the planned mission and the actual path the UAV will follow in the given scenario, the console window displays output and communication messages from the UAV, and the command window allows control of the simulator.
 
 \begin{figure}[htbp!] 
 \centering    
@@ -165,6 +165,8 @@ Fig. \ref{fig:missionplanner} shows a typical mission plan in MissionPlanner, wh
 \label{fig:missionplanner}
 \end{figure}
 
+Another feature of both APM Planner 2 and MissionPlanner is their ability to act as a Ground Control Station (GCS). In this role, these products act as tracking and monitoring systems for UAVs whilst they are in flight, enabling the logging and display of flight data in real time. 
+
 %******************************************************************************************************
 %******************************************************************************************************
 \section{Autopilot Hardware} 
@@ -181,7 +183,7 @@ There are currently 4 supported controller boards that have an open hardware des
 \label{fig:pixhawk}
 \end{figure}
 
-It is possible to still use the APM 2.x boards as they are still available for purchase online and will work with older versions of the ArduPlane code. This may be beneficial in certain situations, as the Pixhawk board is considerably more expensive than an APM board. The presence of a controller board is not essential for this project, as we are able to use the SITL simulator described in Section \ref{intro:jsbsim} to simulate UAV flight without one. If one is present, it is possible to use a Hardware In The Loop (HITL) simulator to test changes to the codebase by running them on a controller board. In this instance, the controller board replaces JSBSim whilst simulating flight.
+It is possible to still use the APM 2.x boards as they are still available for purchase online and will work with older versions of the ArduPlane code. This may be beneficial in certain situations, as the Pixhawk board is considerably more expensive than an APM board. The presence of a controller board is not essential for this project, as we are able to use the SITL simulator described in Section \ref{intro:jsbsim} to simulate UAV flight without one. If one is present, it is possible to use a Hardware In The Loop (HITL) simulator to test changes to the code base by running them on a controller board. In this instance, the controller board replaces JSBSim whilst simulating flight.
 
 \begin{figure}[htbp!] 
 \centering    
@@ -220,4 +222,4 @@ These objectives are explained at the highest level possible in a simple manner,
 \section{Introduction Summary}
 \label{intro:summary}
 
-This chapter has provided some background information and contextual information, to enable the reader to fully understand the desire for completing this project. By discussing ArduPlane and the associated controller boards it is hoped that the reader is able to begin to understand the working requirements and tools available to undertake this project. 
+This chapter has provided some background information and contextual information, to enable the reader to fully understand the desire for completing this project. By discussing ArduPlane and the associated controller boards it is hoped that the reader is able to begin to envision the working requirements and tools available to undertake this project. 
